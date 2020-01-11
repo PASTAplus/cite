@@ -13,11 +13,11 @@
 """
 import daiquiri
 
-logger = daiquiri.getLogger('utility: ' + __name__)
+logger = daiquiri.getLogger("utility: " + __name__)
 
 
 def pid_triple(pid: str):
-    _ = pid.strip().split('.')
+    _ = pid.strip().split(".")
     return _[0], _[1], _[2]
 
 

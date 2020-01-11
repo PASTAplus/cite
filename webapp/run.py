@@ -17,32 +17,32 @@ import requests
 
 from webapp.config import Config
 
-logger = daiquiri.getLogger('run.py: ' + __name__)
+logger = daiquiri.getLogger("run.py: " + __name__)
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
 
-@app.route('/cite')
+@app.route("/cite")
 def hello_world():
-    return 'Hello on Wheels!'
+    return "Hello on Wheels!"
 
 
-@app.route('/cite/<pid>')
+@app.route("/cite/<pid>")
 def cite(pid=None):
-    env = request.args.get('env')
-    format = request.args.get('format')
+    env = request.args.get("env")
+    format = request.args.get("format")
 
     if pid is None:
-        return 'Help!'
+        return "Help!"
     try:
-        #response = citation(pid=pid, env=env, format=format)
+        # response = citation(pid=pid, env=env, format=format)
         pass
-        return 'response'
+        return "response"
     except requests.exceptions.ConnectionError as e:
         logger.error(e)
         abort(400)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()
