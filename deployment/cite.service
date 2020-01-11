@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve PASTA Cite services
+After=network.target
+
+[Service]
+User=pasta
+Group=www-data
+WorkingDirectory=/home/pasta/cite
+Environment="PATH=/home/pasta/anaconda3/envs/cite/bin"
+ExecStart=/home/pasta/anaconda3/envs/cite/bin/uwsgi --ini deployment/cite.ini
+
+[Install]
+WantedBy=multi-user.target
