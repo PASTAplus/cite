@@ -11,6 +11,9 @@
 :Created:
     01/10/2020
 """
+import logging
+import os
+
 import daiquiri
 from flask import abort, Flask, request, send_file
 import requests
@@ -18,7 +21,13 @@ import requests
 from webapp.config import Config
 from webapp.eml import Eml
 
+
+cwd = os.path.dirname(os.path.realpath(__file__))
+logfile = cwd + "/run.log"
+daiquiri.setup(level=logging.INFO,
+               outputs=(daiquiri.output.File(logfile), "stdout",))
 logger = daiquiri.getLogger("run.py: " + __name__)
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
