@@ -21,11 +21,9 @@ import requests
 from webapp.config import Config
 from webapp.eml import Eml
 
-
 cwd = os.path.dirname(os.path.realpath(__file__))
 logfile = cwd + "/run.log"
-daiquiri.setup(level=logging.INFO,
-               outputs=(daiquiri.output.File(logfile), "stdout",))
+daiquiri.setup(level=logging.INFO, outputs=(daiquiri.output.File(logfile), "stdout"))
 logger = daiquiri.getLogger("run.py: " + __name__)
 
 
