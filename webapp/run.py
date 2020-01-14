@@ -20,6 +20,8 @@ import requests
 
 from webapp.config import Config
 from webapp.eml import Eml
+from webapp.eml import Creator
+
 
 cwd = os.path.dirname(os.path.realpath(__file__))
 logfile = cwd + "/run.log"
@@ -52,11 +54,13 @@ def cite(pid=None):
 
 def citation(pid: str = None, env: str = "p", accept: str = "text/html") -> str:
     c = None
+    title = None
     scope, identifier, revision = pid_triple(pid)
     url = f"{Config.PASTA_P}/metadata/eml/{scope}/{identifier}/{revision}"
     r = requests.get(url)
-    eml = Eml(r.text)
-    c = f"Your package identifier is {pid}!"
+    eml = r.text
+    eml = Eml(eml=eml)
+    c = f"{pid} citation is {eml.creators}. {eml.pubdate}. {eml.title}. Environmental Data Initiative. DOI Placeholder"
     return c
 
 

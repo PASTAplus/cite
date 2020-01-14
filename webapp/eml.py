@@ -71,6 +71,7 @@ class Creator(object):
     def org_name(self):
         return self._org_name
 
+
 class Eml(object):
     def __init__(self, eml: str):
         self._eml = eml.encode("utf-8")
