@@ -35,7 +35,7 @@ class Creator(object):
     def __init__(self, creator):
         self._creator = creator
         self._surname = self._get_surname()
-        self._given_name = None
+        self._given_name = self._get_given_name()
         self._org_name = None
 
     def _get_surname(self):
@@ -45,10 +45,20 @@ class Creator(object):
             surname = clean(_.text)
         return surname
 
+    def _get_given_name(self):
+        given_name = None
+        _ = self._creator.find(".//individualName/givenName")
+        if _ is not None:
+            given_name = clean(_.text)
+        return given_name
+
     @property
     def surname(self):
         return self._surname
 
+    @property
+    def given_name(self):
+        return self._given_name
 
 class Eml(object):
     def __init__(self, eml: str):
