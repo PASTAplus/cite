@@ -55,6 +55,7 @@ class Eml(object):
         self._eml = eml.encode("utf-8")
         self._root = etree.fromstring(self._eml)
         self._title = self._get_title()
+        self._pubdate = self._get_pubdate()
         self._creators = self._get_creators()
 
     def _get_creators(self):
@@ -72,6 +73,13 @@ class Eml(object):
             title = clean(_.xpath("string()"))
         return title
 
+    def _get_pubdate(self):
+        pubdate = ""
+        _ = self._root.find(".//pubDate")
+        if _ is not None:
+            pubdate = clean(_.xpath("string()"))
+        return pubdate
+
     @property
     def creators(self):
         return self._creators
@@ -79,6 +87,10 @@ class Eml(object):
     @property
     def title(self):
         return self._title
+
+    @property
+    def pubdate(self):
+        return self._pubdate
 
 
 def main():
