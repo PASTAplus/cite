@@ -11,6 +11,8 @@
 :Created:
     01/11/2020
 """
+from collections import namedtuple
+
 import daiquiri
 from lxml import etree
 
@@ -31,45 +33,12 @@ def clean(text):
     return " ".join(text.split())
 
 
-class Creator(object):
-    def __init__(self, creator):
-        self._creator = creator
-        self._surname = self._get_surname()
-        self._given_name = self._get_given_name()
-        self._org_name = self._get_org_name()
+Creator = namedtuple('Creator', ['individualName', 'organizationName',
+                                 'positionName'])
+Creator.__new__.__defaults__ = (None, None, None)
 
-    def _get_surname(self):
-        surname = None
-        _ = self._creator.find(".//individualName/surName")
-        if _ is not None:
-            surname = clean(_.text)
-        return surname
-
-    def _get_given_name(self):
-        given_name = None
-        _ = self._creator.find(".//individualName/givenName")
-        if _ is not None:
-            given_name = clean(_.text)
-        return given_name
-
-    def _get_org_name(self):
-        org_name = None
-        _ = self._creator.find(".//organizationName")
-        if _ is not None:
-            org_name = clean(_.text)
-        return org_name
-
-    @property
-    def surname(self):
-        return self._surname
-
-    @property
-    def given_name(self):
-        return self._given_name
-
-    @property
-    def org_name(self):
-        return self._org_name
+IndividualName = namedtuple('IndividualName', ['givenName', 'surName'])
+IndividualName.__new__.__defaults__ = (None, None)
 
 
 class Eml(object):
@@ -79,14 +48,40 @@ class Eml(object):
         self._title = self._get_title()
         self._pubdate = self._get_pubdate()
         self._creators = self._get_creators()
+        pass
 
     def _get_creators(self):
-        creators = list()
-        _ = self._root.findall(".//dataset/creator")
-        for c in _:
-            creator = Creator(c)
-            creators.append(creator)
-        return creators
+        c = list()
+        creators = self._root.findall(".//dataset/creator")
+        for creator in creators:
+            individual_names = list()
+            individualNames = creator.findall(".//individualName")
+            for individualName in individualNames:
+                givenNames = individualName.findall(".//givenName")
+                given_names = list()
+                for givenName in givenNames:
+                    name = flatten(givenName)
+                    given_names.append(name.strip())
+                surName = individualName.find(".//surName")
+                sur_name = flatten(surName)
+                individual_name = IndividualName(givenName=given_names,
+                                                 surName=sur_name.strip())
+                individual_names.append(individual_name)
+            organization_names = list()
+            organizationNames = creator.findall(".//organizationName")
+            for organizationName in organizationNames:
+                organization_name = flatten(organizationName)
+                organization_names.append(organization_name.strip())
+            position_names = list()
+            positionNames = creator.findall(".//positionName")
+            for positionName in positionNames:
+                position_name = flatten(positionName)
+                position_names.append(position_name.strip())
+            C = Creator(individualName=individual_names,
+                        organizationName=organization_names,
+                        positionName=position_names)
+            c.append(C)
+        return c
 
     def _get_title(self):
         title = ""
