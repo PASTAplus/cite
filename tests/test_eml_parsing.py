@@ -16,7 +16,7 @@ import pytest
 
 from webapp.eml import Eml
 
-test_eml_file = "/home/servilla/local/schemas/EML/samples/edi.460.1.xml"
+test_eml_file = "./data/test_eml.1.1.xml"
 
 @pytest.fixture()
 def eml_str():
