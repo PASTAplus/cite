@@ -20,13 +20,13 @@ logger = daiquiri.getLogger("eml_2_1_1: " + __name__)
 
 
 def flatten(element):
-    t = ""
-    if hasattr(element, "text"):
-        t += element.text
+    t = list()
+    if hasattr(element, "text") and element.text is not None:
+        t.append(element.text.strip())
     if hasattr(element, "__iter__"):
         for e in element:
-            t += flatten(e)
-    return t
+            t.append(flatten(e))
+    return (" ".join(t)).strip()
 
 
 def clean(text):
@@ -76,7 +76,7 @@ class Eml(object):
             positionNames = creator.findall(".//positionName")
             for positionName in positionNames:
                 position_name = flatten(positionName)
-                position_names.append(position_name.strip())
+                position_names.append(position_name)
             C = Creator(individualName=individual_names,
                         organizationName=organization_names,
                         positionName=position_names)
