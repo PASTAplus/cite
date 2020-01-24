@@ -5,7 +5,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd">
     <dataset>
-        <title>This is test for the generation of citations from EML</title>
+        <title>This is test for <value>the generation</value> of citations from EML</title>
         <creator>
             <individualName>
                 <givenName>Mickey</givenName>
@@ -33,6 +33,7 @@
             </organizationName>
             <organizationName>Parmount Studios</organizationName>
         </creator>
+        <pubDate>2020-01-23</pubDate>
         <contact>
             <positionName>Information Manager</positionName>
         </contact>
