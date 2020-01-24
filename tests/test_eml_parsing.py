@@ -25,6 +25,7 @@ def eml_str():
     return e
 
 
-def test_eml(eml_str):
+def test_eml_object(eml_str):
     eml = Eml(eml_str)
+    print(eml.creators)
     assert isinstance(eml, Eml)
