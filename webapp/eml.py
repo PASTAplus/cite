@@ -33,11 +33,11 @@ def clean(text):
     return " ".join(text.split())
 
 
-Creator = namedtuple('Creator', ['individualName', 'organizationName',
-                                 'positionName'])
+Creator = namedtuple('Creator', ['individualNames', 'organizationNames',
+                                 'positionNames'])
 Creator.__new__.__defaults__ = (None, None, None)
 
-IndividualName = namedtuple('IndividualName', ['givenName', 'surName'])
+IndividualName = namedtuple('IndividualName', ['givenNames', 'surName'])
 IndividualName.__new__.__defaults__ = (None, None)
 
 
@@ -60,26 +60,26 @@ class Eml(object):
                 givenNames = individualName.findall(".//givenName")
                 given_names = list()
                 for givenName in givenNames:
-                    name = flatten(givenName)
-                    given_names.append(name.strip())
+                    name = clean(givenName.xpath("string()"))
+                    given_names.append(name)
                 surName = individualName.find(".//surName")
-                sur_name = flatten(surName)
-                individual_name = IndividualName(givenName=given_names,
+                sur_name = clean(surName.xpath("string()"))
+                individual_name = IndividualName(givenNames=given_names,
                                                  surName=sur_name.strip())
                 individual_names.append(individual_name)
             organization_names = list()
             organizationNames = creator.findall(".//organizationName")
             for organizationName in organizationNames:
-                organization_name = flatten(organizationName)
+                organization_name = clean(organizationName.xpath("string()"))
                 organization_names.append(organization_name.strip())
             position_names = list()
             positionNames = creator.findall(".//positionName")
             for positionName in positionNames:
-                position_name = flatten(positionName)
+                position_name = clean(positionName.xpath("string()"))
                 position_names.append(position_name)
-            C = Creator(individualName=individual_names,
-                        organizationName=organization_names,
-                        positionName=position_names)
+            C = Creator(individualNames=individual_names,
+                        organizationNames=organization_names,
+                        positionNames=position_names)
             c.append(C)
         return c
 
