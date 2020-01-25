@@ -13,13 +13,33 @@
     1/23/20
 """
 import daiquiri
+import requests
+from lxml import etree
 
 logger = daiquiri.getLogger(__name__)
 
 
-def pid_triple(pid: str) -> tuple:
-    _ = pid.strip().split(".")
-    scope = str(_[0])
-    identifier = int(_[1])
-    revision = int(_[2])
-    return scope, identifier, revision
+def doi_url(doi: str) -> str:
+    url = "https://doi.org/"
+    return doi.replace("doi:", url)
+
+
+def pub_year(pubdate: str) -> str:
+    year = pubdate.split("-")[0]
+    return year
+
+
+def requests_wrapper(url: str) -> str:
+    r = requests.get(url)
+    if r.status_code == requests.codes.ok:
+        return r.text
+    else:
+        raise requests.exceptions.ConnectionError()
+
+
+def resource_metadata(rmd: str):
+    _ = etree.fromstring(rmd.encode('utf-8'))
+    date_created = _.find('.//dateCreated').text
+    upload_date = date_created.split(' ')[0]
+    doi = _.find('.//doi').text
+    return upload_date, doi

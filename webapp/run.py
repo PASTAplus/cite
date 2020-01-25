@@ -19,7 +19,6 @@ from flask import abort, Flask, request, send_file
 
 from webapp.citation import Citation
 from webapp.config import Config
-from webapp.eml import Eml
 
 cwd = os.path.dirname(os.path.realpath(__file__))
 logfile = cwd + "/run.log"
@@ -41,12 +40,13 @@ def help():
 @app.route("/cite/<pid>")
 def cite(pid=None):
     env = request.args.get("env")
+    style = request.args.get("style")
     accept = request.headers.get("Accept")
     # TODO token = request.args.get("token")
 
     try:
-        citation = Citation(pid=pid, env=env, accept=accept)
-        response = citation.citation
+        citation = Citation(pid, env)
+        response = citation.base
         return response
     except Exception as e:
         logger.error(e)
