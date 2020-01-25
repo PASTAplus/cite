@@ -51,37 +51,39 @@ class Eml(object):
         pass
 
     def _get_creators(self):
-        c = list()
-        creators = self._root.findall(".//dataset/creator")
-        for creator in creators:
+        creators = list()
+        _creators = self._root.findall(".//dataset/creator")
+        for _creator in _creators:
             individual_names = list()
-            individualNames = creator.findall(".//individualName")
-            for individualName in individualNames:
-                givenNames = individualName.findall(".//givenName")
-                given_names = list()
-                for givenName in givenNames:
-                    name = clean(givenName.xpath("string()"))
-                    given_names.append(name)
-                surName = individualName.find(".//surName")
-                sur_name = clean(surName.xpath("string()"))
-                individual_name = IndividualName(givenNames=given_names,
-                                                 surName=sur_name.strip())
-                individual_names.append(individual_name)
             organization_names = list()
-            organizationNames = creator.findall(".//organizationName")
-            for organizationName in organizationNames:
-                organization_name = clean(organizationName.xpath("string()"))
-                organization_names.append(organization_name.strip())
             position_names = list()
-            positionNames = creator.findall(".//positionName")
-            for positionName in positionNames:
-                position_name = clean(positionName.xpath("string()"))
+            _individual_names = _creator.findall(".//individualName")
+            for _individual_name in _individual_names:
+                given_names = list()
+                _given_names = _individual_name.findall(".//givenName")
+                for _given_name in _given_names:
+                    given_name = (clean(_given_name.xpath("string()"))).strip()
+                    given_names.append(given_name)
+                _sur_name = _individual_name.find(".//surName")
+                sur_name = (clean(_sur_name.xpath("string()"))).strip()
+                individual_name = {"sur_name": sur_name,
+                                   "given_names": given_names}
+                individual_names.append(individual_name)
+            _organization_names = _creator.findall(".//organizationName")
+            for _organization_name in _organization_names:
+                organization_name = (
+                    clean(_organization_name.xpath("string()"))).strip()
+                organization_names.append(organization_name)
+            _position_names = _creator.findall(".//positionName")
+            for _position_name in _position_names:
+                position_name = (
+                    clean(_position_name.xpath("string()")))
                 position_names.append(position_name)
-            C = Creator(individualNames=individual_names,
-                        organizationNames=organization_names,
-                        positionNames=position_names)
-            c.append(C)
-        return c
+            creator = {"individual_names": individual_names,
+                       "organization_names": organization_names,
+                       "position_names": position_names}
+            creators.append(creator)
+        return creators
 
     def _get_title(self):
         title = ""
