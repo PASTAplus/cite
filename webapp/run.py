@@ -46,7 +46,7 @@ def cite(pid=None):
 
     try:
         citation = Citation(pid, env, style, accept)
-        response = citation.base
+        response = citation.stylized
         return response
     except Exception as e:
         logger.error(e)
