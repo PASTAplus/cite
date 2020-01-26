@@ -17,11 +17,10 @@ import json
 import os
 
 import daiquiri
+import pendulum
 
-from webapp import utils
 from webapp.config import Config
 from webapp.eml import Eml
-from webapp.eml import Creator
 from webapp.utils import doi_url
 from webapp.utils import initials
 from webapp.utils import pub_year
@@ -130,5 +129,11 @@ def _stylizer(citation: dict, style: str) -> list:
     stylized.append(citation["publisher"])
     stylized.append(". ")
     stylized.append(doi_url(citation["doi"]))
+    stylized.append(". ")
+
+    now = (pendulum.now("UTC")).format("D MMM YYYY", formatter="alternative")
+    stylized.append("Accessed ")
+    stylized.append(now)
+    stylized.append(". ")
 
     return stylized
