@@ -12,6 +12,7 @@
 :Created:
     1/21/20
 """
+import copy
 import json
 import os
 
@@ -22,6 +23,7 @@ from webapp.config import Config
 from webapp.eml import Eml
 from webapp.eml import Creator
 from webapp.utils import doi_url
+from webapp.utils import initials
 from webapp.utils import pub_year
 from webapp.utils import requests_wrapper
 from webapp.utils import resource_metadata
@@ -31,7 +33,7 @@ logger = daiquiri.getLogger(__name__)
 
 class Citation(object):
 
-    def __init__(self, pid: str, env: str):
+    def __init__(self, pid: str, env: str, style: str, accept: str):
 
         if env in ('d', 'dev', 'development'):
             pasta = Config.PASTA_D
@@ -63,9 +65,16 @@ class Citation(object):
             with open(file_path, "w") as fp:
                 json.dump(self._citation, fp)
 
+        self._stylized = "".join(_stylizer(copy.copy(self._citation), style))
+
+
     @property
     def base(self):
         return self._citation
+
+    @property
+    def stylized(self):
+        return self._stylized
 
 
 def _make_base_citation(title: str, pubdate: str, version: str,
@@ -78,3 +87,48 @@ def _make_base_citation(title: str, pubdate: str, version: str,
     citation["authors"] = authors
     citation["publisher"] = Config.PUBLISHER
     return citation
+
+
+def _stylizer(citation: dict, style: str) -> list:
+
+    stylized = list()
+    authors = citation["authors"]
+
+    # First author is surname followed by given name initials
+    for author in authors:
+        individual_names = author["individual_names"]
+        if len(individual_names) > 0:
+            individual_name = individual_names[0]
+            sur_name = individual_name["sur_name"]
+            stylized.append(sur_name)
+            stylized.append(" ")
+            given_names = individual_name["given_names"]
+            given_name_initials = initials(given_names)
+            stylized.append(given_name_initials)
+            del individual_names[0]
+            break
+
+    for author in authors:
+        individual_names = author["individual_names"]
+        for individual_name in individual_names:
+            stylized.append(", ")
+            given_names = individual_name["given_names"]
+            given_name_initials = initials(given_names)
+            stylized.append(given_name_initials)
+            stylized.append(" ")
+            sur_name = individual_name["sur_name"]
+            stylized.append(sur_name)
+    stylized.append(". ")
+
+    stylized.append(pub_year(citation["pubdate"]))
+    stylized.append(". ")
+    stylized.append(citation["title"])
+    stylized.append(". ")
+    stylized.append("Version ")
+    stylized.append(citation["version"])
+    stylized.append(". ")
+    stylized.append(citation["publisher"])
+    stylized.append(". ")
+    stylized.append(doi_url(citation["doi"]))
+
+    return stylized
