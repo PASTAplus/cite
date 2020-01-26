@@ -45,7 +45,7 @@ def cite(pid=None):
     # TODO token = request.args.get("token")
 
     try:
-        citation = Citation(pid, env)
+        citation = Citation(pid, env, style, accept)
         response = citation.base
         return response
     except Exception as e:
