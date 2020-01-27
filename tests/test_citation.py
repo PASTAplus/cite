@@ -20,9 +20,9 @@ from webapp.citation import Citation
 
 
 def test_citation():
-    pid = "edi.2.1"
+    pid = "knb-lter-nin.1.1"
     env = "production"
-    style = "EDI"
+    style = "ESIP"
     accept = "text/html"
     citation = Citation(pid, env, style, accept)
     assert isinstance(citation, Citation)
