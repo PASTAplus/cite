@@ -20,10 +20,10 @@ from webapp.citation import Citation
 
 
 def test_citation():
-    pid = "knb-lter-nin.1.1"
+    pid = "edi.2.1"
     env = "production"
     style = "EDI"
-    accept = "test/html"
+    accept = "text/html"
     citation = Citation(pid, env, style, accept)
     assert isinstance(citation, Citation)
     assert citation.base is not None
