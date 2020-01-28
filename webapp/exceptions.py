@@ -18,3 +18,10 @@ class StyleError(Exception):
     Args:
         msg (str): explanation of the error
     """
+
+
+class FormatError(Exception):
+    """Raised when a citation format error occurs
+    Args:
+        msg (str): explanation of the error
+    """
