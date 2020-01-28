@@ -24,9 +24,11 @@ def doi_url(doi: str) -> str:
     return doi.replace("doi:", url)
 
 
-def initials(names: list) -> str:
-    return "".join(map(lambda s: f"{s[0]}.", names))
-
+def initials(names: list, dot: bool = True) -> str:
+    if dot:
+        return "".join(map(lambda s: f"{s[0]}.", names))
+    else:
+        return "".join(map(lambda s: f"{s[0]}", names))
 
 def pub_year(pubdate: str) -> str:
     year = pubdate.split("-")[0]
