@@ -29,3 +29,6 @@ class Config(object):
     PASTA_D = "https://pasta-d.lternet.edu/package"
 
     PUBLISHER = "Environmental Data Initiative"
+    DEFAULT_ENV = "production"
+    DEFAULT_STYLE = "ESIP"
+    DEFAULT_ACCEPT = "text/plain"
