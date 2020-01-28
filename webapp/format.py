@@ -40,13 +40,18 @@ def application_json(stylized: dict):
 
 
 def text_html(stylized: dict):
-    doi = stylized["doi"]
-    a = f"<a href='{doi}'>{doi}</a>"
-    stylized["doi"] = a
+    if "doi" in stylized:
+        doi = stylized["doi"]
+        if doi[-1] == ".":
+            doi = doi.strip(".")
+            stylized["doi"] = f"<a href='{doi}'>{doi}</a>."
+        else:
+            stylized["doi"] = f"<a href='{doi}'>{doi}</a>"
+
     items = list()
     for item in stylized:
         items.append(stylized[item])
-    return ". ".join(items)
+    return " ".join(items)
 
 
 
@@ -54,7 +59,7 @@ def text_plain(stylized: dict):
     items = list()
     for item in stylized:
         items.append(stylized[item])
-    return ". ".join(items)
+    return " ".join(items)
 
 
 formats = {
