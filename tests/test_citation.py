@@ -23,7 +23,7 @@ def test_citation():
     pid = "knb-lter-nin.1.1"
     env = "production"
     style = "ESIP"
-    accept = "text/plain"
+    accept = "text/html"
     citation = Citation(pid, env, style, accept)
     assert isinstance(citation, Citation)
     assert citation.base is not None
