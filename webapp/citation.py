@@ -65,7 +65,7 @@ class Citation(object):
         self._stylizer = Stylizer(self._citation)
         self._stylized = self._stylizer.stylize(style)
         self._formatter = Formatter(self._stylized)
-        self._formatted = self._formatter.format(accept)
+        self._media_type, self._formatted = self._formatter.format(accept)
 
 
     @property
@@ -73,12 +73,17 @@ class Citation(object):
         return self._citation
 
     @property
+    def formatted(self):
+        return self._formatted
+
+    @property
+    def media(self):
+        return self._media_type
+
+    @property
     def stylized(self):
         return self._stylized
 
-    @property
-    def formatted(self):
-        return self._formatted
 
 
 def _make_base_citation(title: str, pubdate: str, version: str,

@@ -40,18 +40,20 @@ def help():
 @app.route("/cite/<pid>")
 def cite(pid=None):
     env = request.args.get("env")
-    if env is None: env = Config.DEFAULT_ENV
+    if env is None:
+        env = Config.DEFAULT_ENV
     style = request.args.get("style")
-    if style is None: style = Config.DEFAULT_STYLE
+    if style is None:
+        style = Config.DEFAULT_STYLE
     accept = request.headers.get("Accept")
-    if accept is None or accept == "*/*": accept = Config.DEFAULT_ACCEPT
-    accept = accept.split(",")[0]
+    if accept is None:
+        accept = Config.DEFAULT_ACCEPT
     # TODO token = request.args.get("token")
 
     try:
         citation = Citation(pid, env, style, accept)
         response = make_response(citation.formatted)
-        response.headers['Content-Type'] = accept
+        response.headers['Content-Type'] = citation.media
         return response
     except Exception as e:
         logger.error(e)

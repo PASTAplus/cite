@@ -16,6 +16,7 @@ import json
 
 import daiquiri
 
+from webapp.config import Config
 from webapp.exceptions import FormatError
 
 logger = daiquiri.getLogger(__name__)
@@ -26,13 +27,16 @@ class Formatter(object):
         self._stylized = stylized
 
     def format(self, accept: str):
-        if accept in formats:
-            formatter = formats[accept]
-            formatted = formatter(self._stylized)
-            return formatted
-        else:
-            msg = f"Unrecognized format requested: {accept}"
-            raise FormatError(msg)
+        accepts = [ _.strip() for _ in accept.split(",")]
+        for media_type in accepts:
+            if media_type in ("*/*", "text/*"):
+                media_type = Config.DEFAULT_ACCEPT
+            if media_type in formats:
+                formatter = formats[media_type]
+                formatted = formatter(self._stylized)
+                return media_type, formatted
+        msg = f"No accepted format available: {accept}"
+        raise FormatError(msg)
 
 
 def application_json(stylized: dict):
