@@ -66,8 +66,8 @@ class Citation(object):
             with open(file_path, "w") as fp:
                 json.dump(self._citation, fp)
 
-        self._stylizer = Stylizer(style)
-        self._stylized = self._stylizer.stylize(self._citation, accept)
+        self._stylizer = Stylizer(self._citation)
+        self._stylized = self._stylizer.stylize(style, accept)
 
     @property
     def base(self):

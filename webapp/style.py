@@ -26,53 +26,26 @@ logger = daiquiri.getLogger(__name__)
 
 
 class Stylizer(object):
-    def __init__(self, style: str):
+    def __init__(self, citation: dict):
+        self._citation = citation
+
+    def stylize(self, style: str, accept: str):
         if style in styles:
-            self._stylizer = styles[style]
+            stylizer = styles[style]
+            stylized = stylizer(self._citation, accept)
+            return stylized
         else:
             msg = f"Unrecognized style requested: {style}"
             raise StyleError(msg)
-
-
-    @property
-    def stylize(self):
-        return self._stylizer
 
 
 def esip(citation: dict, accept: str) -> str:
 
     stylized = list()
 
-    individuals = list()
-    authors = citation["authors"]
-    for author in authors:
-        individual_names = author["individual_names"]
-        for individual_name in individual_names:
-            given_names = individual_name["given_names"]
-            given_name_initials = initials(given_names)
-            sur_name = individual_name["sur_name"]
-            name = f"{given_name_initials} {sur_name}"
-            individuals.append(name.strip())
-
-    organizations = list()
-    authors = citation["authors"]
-    for author in authors:
-        individual_names = author["individual_names"]
-        position_names = author["position_names"]
-        organization_names = author["organization_names"]
-        if len(individual_names) == 0:
-            for organization_name in organization_names:
-                organizations.append(organization_name)
-
-    positions = list()
-    authors = citation["authors"]
-    for author in authors:
-        individual_names = author["individual_names"]
-        position_names = author["position_names"]
-        organization_names = author["organization_names"]
-        if len(individual_names) == 0 and len(organization_names) == 0:
-            for position_name in position_names:
-                positions.append(position_name)
+    individuals = _individuals(citation["authors"])
+    organizations = _organization(citation["authors"])
+    positions = _positions(citation["authors"])
 
     # Reverse lead author name
     if len(individuals) > 0:
@@ -128,9 +101,52 @@ def esip(citation: dict, accept: str) -> str:
     stylized.append(now)
     stylized.append(". ")
 
+    formatted = mime_formatter(stylized, accept)
+
     return "".join(stylized)
 
 
 styles = {
     "ESIP": esip
 }
+
+
+def mime_formatter(stylized: list, accept: str) -> str:
+    pass
+
+
+def _individuals(authors: list) -> list:
+    individuals = list()
+    for author in authors:
+        individual_names = author["individual_names"]
+        for individual_name in individual_names:
+            given_names = individual_name["given_names"]
+            given_name_initials = initials(given_names)
+            sur_name = individual_name["sur_name"]
+            name = f"{given_name_initials} {sur_name}"
+            individuals.append(name.strip())
+    return individuals
+
+
+def _organization(authors: list) -> list:
+    organizations = list()
+    for author in authors:
+        individual_names = author["individual_names"]
+        position_names = author["position_names"]
+        organization_names = author["organization_names"]
+        if len(individual_names) == 0:
+            for organization_name in organization_names:
+                organizations.append(organization_name)
+    return organizations
+
+
+def _positions(authors: list) -> list:
+    positions = list()
+    for author in authors:
+        individual_names = author["individual_names"]
+        position_names = author["position_names"]
+        organization_names = author["organization_names"]
+        if len(individual_names) == 0 and len(organization_names) == 0:
+            for position_name in position_names:
+                positions.append(position_name)
+    return positions
