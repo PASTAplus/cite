@@ -32,3 +32,4 @@ class Config(object):
     DEFAULT_ENV = "production"
     DEFAULT_STYLE = "ESIP"
     DEFAULT_ACCEPT = "text/plain"
+    HELP_URL = "https://github.com/PASTAplus/cite"

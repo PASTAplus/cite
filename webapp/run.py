@@ -34,7 +34,7 @@ app.config.from_object(Config)
 @app.route("/cite")
 @app.route("/cite/help")
 def help():
-    redirect_url = "https://github.com/PASTAplus/cite"
+    redirect_url = Config.HELP_URL
     return redirect(redirect_url, 301)
 
 
