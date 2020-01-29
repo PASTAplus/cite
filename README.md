@@ -13,7 +13,7 @@ Cite accepts the following options as query parameters with the request URL:
  
 ```?<env>=[production(default), staging, development]```
 
-```?<style>=[ESIP(default), DRYAD]```
+```?<style>=[ESIP(default), DRYAD, RAW]```
 
 The response body format is controlled by the request "Accept" header value. 
 Recognized media-types are: `text/plain`, `text/html`, and `application/json`
@@ -56,6 +56,88 @@ Connection: keep-alive
 
 Armitage, A.R., C.A. Weaver, J.S. Kominoski, and S.C. Pennings. 2020. Hurricane Harvey: Coastal wetland plant responses and recovery in Texas: 2014-2019 ver 1. Environmental Data Initiative. <a href='https://doi.org/10.6073/pasta/e288ccaf55afceecc29bdf0a341248d6'>https://doi.org/10.6073/pasta/e288ccaf55afceecc29bdf0a341248d6</a>. Accessed 2020-01-28.
 ```
+
+```text
+curl -i -H "Accept: application/json" -X GET https://cite.edirepository.org/cite/edi.460.1?style=RAW
+HTTP/1.1 200 OK
+Server: nginx/1.10.3 (Ubuntu)
+Date: Wed, 29 Jan 2020 20:41:12 GMT
+Content-Type: application/json
+Content-Length: 1450
+Connection: keep-alive
+
+{
+  "authors": [
+    {
+      "individual_names": [
+        {
+          "given_names": [
+            "Anna", 
+            "R"
+          ], 
+          "sur_name": "Armitage"
+        }
+      ], 
+      "organization_names": [
+        "Texas A&M University at Galveston"
+      ], 
+      "position_names": []
+    }, 
+    {
+      "individual_names": [
+        {
+          "given_names": [
+            "Carolyn", 
+            "A"
+          ], 
+          "sur_name": "Weaver"
+        }
+      ], 
+      "organization_names": [
+        "Texas A&M University - Corpus Christi"
+      ], 
+      "position_names": []
+    }, 
+    {
+      "individual_names": [
+        {
+          "given_names": [
+            "John", 
+            "S"
+          ], 
+          "sur_name": "Kominoski"
+        }
+      ], 
+      "organization_names": [
+        "Florida International University"
+      ], 
+      "position_names": []
+    }, 
+    {
+      "individual_names": [
+        {
+          "given_names": [
+            "Steven", 
+            "C"
+          ], 
+          "sur_name": "Pennings"
+        }
+      ], 
+      "organization_names": [
+        "University of Houston"
+      ], 
+      "position_names": []
+    }
+  ], 
+  "doi": "doi:10.6073/pasta/e288ccaf55afceecc29bdf0a341248d6", 
+  "pubdate": "2020-01-21", 
+  "publisher": "Environmental Data Initiative", 
+  "title": "Hurricane Harvey: Coastal wetland plant responses and recovery in Texas: 2014-2019", 
+  "version": "1"
+}
+
+```
+
 
 ## A note about how Cite generates a citation
 
