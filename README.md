@@ -60,12 +60,6 @@ Armitage, A.R., C.A. Weaver, J.S. Kominoski, and S.C. Pennings. 2020. Hurricane 
 
 A Cite generated citation may consist of a list of authors, publication year, title, data package version, publisher, digital object identifier, and access date. The order and presence of these components depends on the style requested for the citation (see "style" parameter above).
 
-Cite uses content extracted from the science metadata described by an
-[Ecological Metadata Language](https://eml.ecoinformatics.org) (EML) document
-to generate the author list. Specifically, Cite uses the [*creator*](https://eml.ecoinformatics.org/schema/eml-resource_xsd.html#ResourceGroup_creator) section of EML. The EML *creator* element is divided into three primary secitons: individuals, organizations, and positions (i.e., roles) - see below.
-
-<p align="center"><img src="https://raw.githubusercontent.com/PASTAplus/cite/master/eml-resource_xsd_Element_creator.png"/></p>
-
 The raw content of a citation, and a brief discussion of the fields, follows:
 
 ```
@@ -80,7 +74,13 @@ The raw content of a citation, and a brief discussion of the fields, follows:
 }
 ```
 
-- **Authors** - Cite uses indviduals, followed by organizations, as the authors. If neither individuals or organizations are present, it will use a position. Cite also assumes that a creator element contains information pertaining to only a single "creator", although EML allows for multiple identities in a single creator element. This means that if an individual name is present within a *creator* element, Cite will ignore the organization or position names within the same element when creating the author list. Cite also respects the order of *creator* elements as presented in the EML. As such, Cite will order the author list beginning with individuals, and followed by organizations, according to the order in the EML. To remphasize, Cite will only display a position name if there are no individuals or organizations defined in the *creator* section of the EML.
+- **Authors** - Cite uses content extracted from the science metadata described by an
+[Ecological Metadata Language](https://eml.ecoinformatics.org) (EML) document
+to generate the *author list*. Specifically, Cite uses the [*creator*](https://eml.ecoinformatics.org/schema/eml-resource_xsd.html#ResourceGroup_creator) section of EML. The EML *creator* element is divided into three primary secitons: individuals, organizations, and positions (i.e., roles) - see below.
+
+    Cite uses indviduals, followed by organizations, as the authors. If neither individuals or organizations are present, it will use a position. Cite also assumes that a creator element contains information pertaining to only a single "creator", although EML allows for multiple identities in a single creator element. This means that if an individual name is present within a *creator* element, Cite will ignore the organization or position names within the same element when creating the author list. Cite also respects the order of *creator* elements as presented in the EML. As such, Cite will order the author list beginning with individuals, and followed by organizations, according to the order in the EML. To remphasize, Cite will only display a position name if there are no individuals or organizations defined in the *creator* section of the EML.
+
+<p align="center"><img src="https://raw.githubusercontent.com/PASTAplus/cite/master/eml-resource_xsd_Element_creator.png"/></p>
 
 - **Publcation Year** - The *publication year* is defined by the date when the data package was archived into the EDI data repository and only displays the year of publication. This publication date may differ from the publication date entered into the EML, which often marks when it became a public data package, although yet archived into a public repository.
 
