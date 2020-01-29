@@ -58,7 +58,7 @@ Armitage, A.R., C.A. Weaver, J.S. Kominoski, and S.C. Pennings. 2020. Hurricane 
 
 ## A note about how Cite generates a citation
 
-A Cite generated citation may consist of a list of authors, publication date, title, date package version, publisher, digital object identifier, and access date (see below). The order and presence of these components depends on the style requested for the citation (see "style" parameter above).
+A Cite generated citation may consist of a list of authors, publication date, title, data package version, publisher, digital object identifier, and access date (see below). The order and presence of these components depends on the style requested for the citation (see "style" parameter above).
 
 ```
 {
