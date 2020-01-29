@@ -7,16 +7,16 @@ to use REST end-point:
 
 ```https://cite.edirepository.org/cite/<pid>```
 
-where "pid" is a PASTA package identifier. Cite accepts the following optional
- parameters:
+where "pid" is a PASTA package identifier. Cite accepts the following options
+ as query parameters on the request URL:
  
 ```?<env>=[production(default), staging, development]```
 
 ```?<style>=[ESIP(default), DRYAD]```
 
 The response body format is controlled by the request "Accept" header value. 
-Recognized media-types are: `text/plain`, `text/html`, and `application/json
-` (note: media-types with parameters are not considered).
+Recognized media-types are: `text/plain`, `text/html`, and `application/json`
+(note: media-types with parameters are not considered).
 
 ## Examples:
 
@@ -55,3 +55,11 @@ Connection: keep-alive
 
 Armitage, A.R., C.A. Weaver, J.S. Kominoski, and S.C. Pennings. 2020. Hurricane Harvey: Coastal wetland plant responses and recovery in Texas: 2014-2019 ver 1. Environmental Data Initiative. <a href='https://doi.org/10.6073/pasta/e288ccaf55afceecc29bdf0a341248d6'>https://doi.org/10.6073/pasta/e288ccaf55afceecc29bdf0a341248d6</a>. Accessed 2020-01-28.
 ```
+
+## A note about how Cite generates a citation
+
+The content of a data package citation is derived from the science metadata
+that is stored within an [Ecological Metadata Lanaguage](https://eml.ecoinformatics.org)
+(EML) document. Specifically, the content comes from within the *creator* section of the EML.
+
+![creator](./eml-resource_xsd_Element_creator.png)
