@@ -48,7 +48,6 @@ class Eml(object):
         self._title = self._get_title()
         self._pubdate = self._get_pubdate()
         self._creators = self._get_creators()
-        pass
 
     def _get_creators(self):
         creators = list()
