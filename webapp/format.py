@@ -23,11 +23,11 @@ logger = daiquiri.getLogger(__name__)
 
 
 class Formatter(object):
-    def __init__(self, stylized: list):
+    def __init__(self, stylized: dict):
         self._stylized = stylized
 
     def format(self, accept: str):
-        accepts = [ _.strip() for _ in accept.split(",")]
+        accepts = [_.strip() for _ in accept.split(",")]
         for media_type in accepts:
             if media_type in ("*/*", "text/*"):
                 media_type = Config.DEFAULT_ACCEPT
