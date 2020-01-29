@@ -85,7 +85,6 @@ class Citation(object):
         return self._stylized
 
 
-
 def _make_base_citation(title: str, pubdate: str, version: str,
                         doi: str, authors: list) -> dict:
     citation = dict()
