@@ -52,8 +52,12 @@ def cite(pid=None):
 
     try:
         citation = Citation(pid, env, style, accept)
-        response = make_response(citation.formatted)
-        response.headers['Content-Type'] = citation.media
+        if style == "RAW":
+            response = make_response(citation.base)
+            response.headers['Content-Type'] = "application/json"
+        else:
+            response = make_response(citation.formatted)
+            response.headers['Content-Type'] = citation.media
         return response
     except Exception as e:
         logger.error(e)

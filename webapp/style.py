@@ -12,9 +12,10 @@
 :Created:
     1/27/20
 """
+import json
+
 import daiquiri
 import pendulum
-
 
 from webapp.exceptions import StyleError
 from webapp.utils import doi_url
@@ -182,7 +183,14 @@ def esip(citation: dict) -> dict:
     return stylized
 
 
+def raw(citation: dict) -> dict:
+    stylized = dict()
+    stylized["raw"] = str(citation)
+    return stylized
+
+
 styles = {
+    "RAW": raw,
     "ESIP": esip,
     "DRYAD": dryad
 }
