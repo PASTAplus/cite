@@ -2,7 +2,7 @@
 A data citation generator for PASTA data packages
 
 Cite is a web service data citation generator for data packages found in the
-Environmental Data Initiative's PASTA data repository. Cite provides a simple
+Environmental Data Initiative's (EDI) PASTA data repository. Cite provides a simple
 to use REST end-point:
 
 ```https://cite.edirepository.org/cite/<pid>```
@@ -58,8 +58,25 @@ Armitage, A.R., C.A. Weaver, J.S. Kominoski, and S.C. Pennings. 2020. Hurricane 
 
 ## A note about how Cite generates a citation
 
-The content of a data package citation is derived from the science metadata
-that is stored within an [Ecological Metadata Lanaguage](https://eml.ecoinformatics.org)
-(EML) document. Specifically, the content comes from within the *creator* section of the EML.
+A Cite generated citation may consist of a list of authors, publication date, title, date package version, publisher, digital object identifier, and access date. The order and presence of these components depends on the style requested for the citation (see above).
+
+Cite uses content extracted from the science metadata described by an
+[Ecological Metadata Language](https://eml.ecoinformatics.org) (EML) document
+to generate the author list. Specifically, Cite uses the [*creator*](https://eml.ecoinformatics.org/schema/eml-resource_xsd.html#ResourceGroup_creator) section of EML. The EML *creator* element is divided into three main secitons: individuals, organizations, and positions (i.e., roles) - see below.
 
 ![creator](./eml-resource_xsd_Element_creator.png)
+
+Cite uses indviduals, followed by organizations, as the authors. If neither individuals or organizations are present, it will use a position. Cite also assumes that a creator element contains information pertaining to only a single "creator", although EML allows for multiple identities in a single creator element. This means that if an individual name is present within a *creator* element, Cite will ignore the organization or position names within the same element when creating the author list. Cite also respects the order of *creator* elements as presented in the EML. As such, Cite will order the author list beginning with individuals, and followed by organizations, according to the order in the EML. To remphasize, Cite will only display a position name if there are no individuals or organizations defined in the *creator* section of the EML.
+
+The publication date is defined by the date when the data package was archived into the EDI data repository and only displays the year of publication. This publication date may differ from the publication date entered into the EML, which often marks when it became a public data package, although yet archived into a public repository.
+
+Cite uses the *title* section of EML as the citation title. EML *title* elements are copied verbatim into the citation.
+
+The citation version number represents the revision step (or increment) of the data package as archived in the EDI data repository. Revision values are whole numbers and have a one-to-one correspondence to the revision of the data package in the repository.
+
+By default, the publisher field of the citation is always to the Environmental Data Initiative. This value will not change during the tenure of the EDI data repository.
+
+The Digital Object Identifier (DOI) will consist of the EDI DOI value that is registered with DataCite. This DOI URL will resolve to the corresponding "landing page" of the data package as displayed on the EDI Data Portal.
+
+The access date displays the date in which the citation was generated, assuming that it serves as a proxy for the date in which the data package was viewed.
+
