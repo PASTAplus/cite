@@ -7,8 +7,9 @@ to use REST end-point:
 
 ```https://cite.edirepository.org/cite/<pid>```
 
-where "pid" is a PASTA package identifier. Cite accepts the following options
- as query parameters on the request URL:
+where "pid" is a PASTA package identifier.
+
+Cite accepts the following options as query parameters with the request URL:
  
 ```?<env>=[production(default), staging, development]```
 
