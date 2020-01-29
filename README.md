@@ -84,7 +84,8 @@ present, it will use a position. Cite also assumes that a creator element contai
 
 <p align="center"><img src="https://raw.githubusercontent.com/PASTAplus/cite/master/eml-resource_xsd_Element_creator.png"/></p>
 
-- **Publcation Year** - The *publication year* is defined by the date when the data package was archived into the EDI data repository and only displays the year of publication. This publication date may differ from the publication date entered into the EML, which often marks when it became a public data package, although yet archived into a public repository.
+- **Publication Year** - The *publication year* is defined by the date when
+ the data package was archived into the EDI data repository and only displays the year of publication. This publication date may differ from the publication date entered into the EML, which often marks when it became a public data package, although yet archived into a public repository.
 
 - **Title** - Cite uses the *title* section of EML as the citation title. EML *title* elements are copied verbatim into the citation.
 
