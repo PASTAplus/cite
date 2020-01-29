@@ -15,7 +15,7 @@ import logging
 import os
 
 import daiquiri
-from flask import abort, Flask, make_response, request, send_file
+from flask import abort, Flask, make_response, redirect, request, send_file
 
 from webapp.citation import Citation
 from webapp.config import Config
@@ -34,7 +34,8 @@ app.config.from_object(Config)
 @app.route("/cite")
 @app.route("/cite/help")
 def help():
-    return "help!"
+    redirect_url = "https://github.com/PASTAplus/cite"
+    return redirect(redirect_url, 301)
 
 
 @app.route("/cite/<pid>")
