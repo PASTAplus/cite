@@ -143,7 +143,7 @@ Connection: keep-alive
 
 A Cite generated citation may consist of a list of authors, publication year, title, data package version, publisher, digital object identifier, and access date. The order and presence of these components depends on the style requested for the citation (see "style" parameter above).
 
-The raw content of a citation, and a brief discussion of the fields, follows:
+The JSON content of an ESIP style citation, and a brief discussion of the fields, follows:
 
 ```
 {
