@@ -35,12 +35,15 @@ class Citation(object):
         if env in ('d', 'dev', 'development'):
             pasta = Config.PASTA_D
             cache = Config.CACHE_D
+            doi_env = "dev"
         elif env in ('s', 'stage', 'staging'):
             pasta = Config.PASTA_S
             cache = Config.CACHE_S
+            doi_env = "stage"
         else:
             pasta = Config.PASTA_P
             cache = Config.CACHE_P
+            doi_env = "prod"
 
         file_path = f'{cache}{pid}.json'
 
@@ -57,16 +60,18 @@ class Citation(object):
             eml = Eml(requests_wrapper(eml_url))
             pubdate, doi = resource_metadata(requests_wrapper(rmd_url))
 
+            if doi_env in ("dev", "stage"):
+                doi = "doi:DOI_PLACE_HOLDER"
+
             self._citation = _make_base_citation(eml.title, pubdate, revision,
                                                  doi, eml.creators)
             with open(file_path, "w") as fp:
                 json.dump(self._citation, fp)
 
-        self._stylizer = Stylizer(self._citation)
+        self._stylizer = Stylizer(pid, self._citation)
         self._stylized = self._stylizer.stylize(style)
         self._formatter = Formatter(self._stylized)
         self._media_type, self._formatted = self._formatter.format(accept)
-
 
     @property
     def base(self):
