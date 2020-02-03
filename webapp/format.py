@@ -43,34 +43,6 @@ def application_json(stylized: dict):
     return json.dumps(stylized)
 
 
-def application_bibtex(stylized: dict):
-    if "authors" in stylized:
-        author = stylized["authors"].rstrip(".")
-        stylized["authors"] = f"author='{author}',\n"
-    if "title" in stylized:
-        title = stylized["title"]
-        stylized["title"] = f"title='{title}',\n"
-    if "pub_year" in stylized:
-        year = stylized["pub_year"].rstrip(".")
-        stylized["pub_year"] = f"year={year},\n"
-    if "version" in stylized:
-        version = stylized["version"].rstrip(".")
-        stylized["version"] = f"version='{version}',\n"
-    if "publisher" in stylized:
-        organization = stylized["publisher"].rstrip(".")
-        stylized["publisher"] = f"organization='{organization}',\n"
-    if "doi" in stylized:
-        url = stylized["doi"].rstrip(".")
-        stylized["doi"] = f"url='{url}',\n"
-    items = list()
-    for item in stylized:
-        items.append(stylized[item])
-
-    s = " ".join(items)
-
-    return f"@ONLINE{{pid,\n {s}\n}}"
-
-
 def text_html(stylized: dict):
     if "doi" in stylized:
         doi = stylized["doi"]
@@ -96,5 +68,5 @@ def text_plain(stylized: dict):
 formats = {
     "application/json": application_json,
     "text/html": text_html,
-    "text/plain": text_plain,
-    "application/x-bibtex": application_bibtex}
+    "text/plain": text_plain
+}
