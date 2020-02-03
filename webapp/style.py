@@ -27,13 +27,14 @@ logger = daiquiri.getLogger(__name__)
 
 
 class Stylizer(object):
-    def __init__(self, citation: dict):
+    def __init__(self, pid: str, citation: dict):
         self._citation = citation
+        self._pid = pid
 
     def stylize(self, style: str):
         if style in styles:
             stylizer = styles[style]
-            stylized = stylizer(self._citation)
+            stylized = stylizer(self._pid, self._citation)
             return stylized
         else:
             msg = f"Unrecognized style requested: {style}"
@@ -76,7 +77,56 @@ def _positions(authors: list) -> list:
     return positions
 
 
-def dryad(citation: dict) -> dict:
+def bibtex(pid: str, citation: dict) -> dict:
+
+    now = (pendulum.now("UTC")).format("YYYY-MM-DD", formatter="alternative")
+    pid = pid.replace(".", "_")
+    stylized = dict()
+
+    individuals = _individuals(citation["authors"])
+    organizations = _organization(citation["authors"])
+    positions = _positions(citation["authors"])
+
+    names = list()
+    for individual in individuals:
+        individual[0] = " ".join([_.strip() for _ in individual[0]])
+        name = f"{individual[0]} {individual[1]}"
+        names.append(name.strip())
+    individuals = names
+
+    names = []
+    for organization in organizations:
+        names.append(f"{{{organization}}}")
+    organizations = names
+
+    authors = individuals + organizations
+    if len(authors) > 0:
+        stylized_authors = " and ".join(authors)
+    else:
+        names = []
+        for position in positions:
+            names.append(f"{{{position}}}")
+        authors = names
+        stylized_authors = " and".join(authors)
+
+    stylized["authors"] = f"author={{{stylized_authors}}}"
+    stylized["title"] = f"title={{{citation['title']}}}"
+    stylized["pub_year"] = f"year={{{pub_year(citation['pubdate'])}}}"
+    stylized["version"] = f"version={{{citation['version']}}}"
+    stylized["publisher"] = f"organization={{{citation['publisher']}}}"
+    stylized["doi"] = f"url={{{doi_url(citation['doi'])}}}"
+    stylized["accessed"] = f"timestamp={{{now}}}"
+
+    items = list()
+    for item in stylized:
+        items.append(stylized[item])
+
+    s = ",\n".join(items)
+    item = {"item": f"@ONLINE{{{pid},\n{s}\n}}\n"}
+    return item
+
+
+def dryad(pid: str, citation: dict) -> dict:
 
     stylized = dict()
 
@@ -124,7 +174,7 @@ def dryad(citation: dict) -> dict:
     return stylized
 
 
-def esip(citation: dict) -> dict:
+def esip(pid: str, citation: dict) -> dict:
 
     stylized = dict()
 
@@ -192,6 +242,6 @@ def raw(citation: dict) -> dict:
 styles = {
     "RAW": raw,
     "ESIP": esip,
-    "DRYAD": dryad
+    "DRYAD": dryad,
+    "BIBTEX": bibtex
 }
-
