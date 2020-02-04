@@ -5,6 +5,7 @@
 :Mod: format
 
 :Synopsis:
+    Formats a PASTA data package citation into the accepted mime-type.
 
 :Author:
     servilla
@@ -35,7 +36,7 @@ class Formatter(object):
                 formatter = formats[media_type]
                 formatted = formatter(self._stylized)
                 return media_type, formatted
-        msg = f"No accepted format available: {accept}"
+        msg = f"Accepted format(s) not supported: {accept}"
         raise FormatError(msg)
 
 
