@@ -62,7 +62,7 @@ def cite(pid=None):
         return response
     except Exception as e:
         logger.error(e)
-        abort(400)
+        abort(400, description=e)
 
 
 if __name__ == "__main__":
