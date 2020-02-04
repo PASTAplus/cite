@@ -5,6 +5,7 @@
 :Mod: style
 
 :Synopsis:
+    Generates a stylized PASTA data package citation for the given style.
 
 :Author:
     servilla
@@ -27,17 +28,20 @@ logger = daiquiri.getLogger(__name__)
 
 
 class Stylizer(object):
-    def __init__(self, pid: str, citation: dict):
+    def __init__(self, citation: dict):
         self._citation = citation
-        self._pid = pid
 
-    def stylize(self, style: str):
+    def stylize(self, style: str, pid: str) -> dict:
+        style = style.upper()
         if style in styles:
             stylizer = styles[style]
-            stylized = stylizer(self._pid, self._citation)
+            if style in ('BIBTEX'):
+                stylized = stylizer(pid, self._citation)
+            else:
+                stylized = stylizer(self._citation)
             return stylized
         else:
-            msg = f"Unrecognized style requested: {style}"
+            msg = f"Requested style not supported: {style}"
             raise StyleError(msg)
 
 
@@ -109,24 +113,24 @@ def bibtex(pid: str, citation: dict) -> dict:
         authors = names
         stylized_authors = " and".join(authors)
 
-    stylized["authors"] = f"author={{{stylized_authors}}}"
-    stylized["title"] = f"title={{{citation['title']}}}"
-    stylized["pub_year"] = f"year={{{pub_year(citation['pubdate'])}}}"
-    stylized["version"] = f"version={{{citation['version']}}}"
-    stylized["publisher"] = f"organization={{{citation['publisher']}}}"
-    stylized["doi"] = f"url={{{doi_url(citation['doi'])}}}"
-    stylized["accessed"] = f"timestamp={{{now}}}"
+    stylized["authors"] = f"    author={{{stylized_authors}}}"
+    stylized["title"] = f"    title={{{{{citation['title']}}}}}"
+    stylized["pub_year"] = f"    year={{{pub_year(citation['pubdate'])}}}"
+    stylized["version"] = f"    version={{{citation['version']}}}"
+    stylized["publisher"] = f"    organization={{{citation['publisher']}}}"
+    stylized["doi"] = f"    url={{{doi_url(citation['doi'])} ({now})}}"
+    stylized["accessed"] = f"    timestamp={{{now}}}"
 
     items = list()
     for item in stylized:
         items.append(stylized[item])
 
     s = ",\n".join(items)
-    item = {"item": f"@ONLINE{{{pid},\n{s}\n}}\n"}
+    item = {"item": f"@online{{{pid},\n{s}\n}}\n"}
     return item
 
 
-def dryad(pid: str, citation: dict) -> dict:
+def dryad(citation: dict) -> dict:
 
     stylized = dict()
 
@@ -174,7 +178,7 @@ def dryad(pid: str, citation: dict) -> dict:
     return stylized
 
 
-def esip(pid: str, citation: dict) -> dict:
+def esip(citation: dict) -> dict:
 
     stylized = dict()
 
@@ -233,7 +237,7 @@ def esip(pid: str, citation: dict) -> dict:
     return stylized
 
 
-def raw(pid: str, citation: dict) -> dict:
+def raw(citation: dict) -> dict:
     stylized = dict()
     stylized["raw"] = str(citation)
     return stylized
