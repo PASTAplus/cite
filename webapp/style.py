@@ -35,7 +35,7 @@ class Stylizer(object):
         style = style.upper()
         if style in styles:
             stylizer = styles[style]
-            if style in ('BIBTEX'):
+            if style in ('BIBTEX', "BIBTEX-ONLINE"):
                 stylized = stylizer(pid, self._citation)
             else:
                 stylized = stylizer(self._citation)
@@ -84,7 +84,6 @@ def _positions(authors: list) -> list:
 def bibtex(pid: str, citation: dict) -> dict:
 
     now = (pendulum.now("UTC")).format("YYYY-MM-DD", formatter="alternative")
-    pid = pid.replace(".", "_")
     stylized = dict()
 
     individuals = _individuals(citation["authors"])
@@ -113,13 +112,72 @@ def bibtex(pid: str, citation: dict) -> dict:
         authors = names
         stylized_authors = " and".join(authors)
 
-    stylized["authors"] = f"    author={{{stylized_authors}}}"
-    stylized["title"] = f"    title={{{{{citation['title']}}}}}"
-    stylized["pub_year"] = f"    year={{{pub_year(citation['pubdate'])}}}"
-    stylized["version"] = f"    version={{{citation['version']}}}"
-    stylized["publisher"] = f"    organization={{{citation['publisher']}}}"
-    stylized["doi"] = f"    url={{{doi_url(citation['doi'])} ({now})}}"
+    doi = doi_url(citation['doi'])
+    publisher = citation['publisher']
+    title = citation['title']
+    version = citation['version']
+    year = pub_year(citation['pubdate'])
+
+    stylized["author"] = f"    author={{{stylized_authors}}}"
+    stylized["title"] = f"    title={{{{{title}. ver {version}}}}}"
+    stylized["year"] = f"    year={{{year}}}"
+    stylized["howpublished"] = f"    howpublished={{{{{publisher}}}}}"
+    stylized["note"] = f"    note={{Online: {doi} ({now})}}"
     stylized["accessed"] = f"    timestamp={{{now}}}"
+
+    items = list()
+    for item in stylized:
+        items.append(stylized[item])
+
+    s = ",\n".join(items)
+    item = {"item": f"@misc{{{pid},\n{s}\n}}\n"}
+    return item
+
+
+def bibtex_online(pid: str, citation: dict) -> dict:
+
+    now = (pendulum.now("UTC")).format("YYYY-MM-DD", formatter="alternative")
+    stylized = dict()
+
+    individuals = _individuals(citation["authors"])
+    organizations = _organization(citation["authors"])
+    positions = _positions(citation["authors"])
+
+    names = list()
+    for individual in individuals:
+        individual[0] = " ".join([_.strip() for _ in individual[0]])
+        name = f"{individual[0]} {individual[1]}"
+        names.append(name.strip())
+    individuals = names
+
+    names = []
+    for organization in organizations:
+        names.append(f"{{{organization}}}")
+    organizations = names
+
+    authors = individuals + organizations
+    if len(authors) > 0:
+        stylized_authors = " and ".join(authors)
+    else:
+        names = []
+        for position in positions:
+            names.append(f"{{{position}}}")
+        authors = names
+        stylized_authors = " and".join(authors)
+
+    doi = doi_url(citation['doi'])
+    publisher = citation['publisher']
+    title = citation['title']
+    version = citation['version']
+    year = pub_year(citation['pubdate'])
+
+    stylized["author"] = f"    author={{{stylized_authors}}}"
+    stylized["title"] = f"    title={{{{{title}. ver {version}}}}}"
+    stylized["year"] = f"    year={{{year}}}"
+    stylized["version"] = f"    version={{{version}}}"
+    stylized["organization"] = f"    organization={{{{{publisher}}}}}"
+    stylized["url"] = f"    url={{{doi} ({now})}}"
+    stylized["timestamp"] = f"    timestamp={{{now}}}"
 
     items = list()
     for item in stylized:
@@ -247,5 +305,6 @@ styles = {
     "RAW": raw,
     "ESIP": esip,
     "DRYAD": dryad,
-    "BIBTEX": bibtex
+    "BIBTEX": bibtex,
+    "BIBTEX-ONLINE": bibtex_online
 }
