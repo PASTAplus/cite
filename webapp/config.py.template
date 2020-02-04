@@ -28,6 +28,10 @@ class Config(object):
     PASTA_S = "https://pasta-s.lternet.edu/package"
     PASTA_D = "https://pasta-d.lternet.edu/package"
 
+    ENV_P = "production"
+    ENV_S = "staging"
+    ENV_D = "development"
+
     PUBLISHER = "Environmental Data Initiative"
     DEFAULT_ENV = "production"
     DEFAULT_STYLE = "ESIP"
