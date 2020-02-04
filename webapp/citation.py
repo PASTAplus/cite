@@ -5,6 +5,8 @@
 :Mod: citation
 
 :Synopsis:
+    Generates a PASTA data package citation using the requested style and
+    in the accepted mime-type.
 
 :Author:
     servilla
@@ -20,6 +22,8 @@ import daiquiri
 
 from webapp.config import Config
 from webapp.eml import Eml
+from webapp.exceptions import DataPackageError
+from webapp.exceptions import PastaEnvironmentError
 from webapp.format import Formatter
 from webapp.style import Stylizer
 from webapp.utils import requests_wrapper
@@ -32,18 +36,21 @@ class Citation(object):
 
     def __init__(self, pid: str, env: str, style: str, accept: str):
 
-        if env in ('d', 'dev', 'development'):
+        if env.lower() in ('d', 'dev', 'development'):
             pasta = Config.PASTA_D
             cache = Config.CACHE_D
-            doi_env = "dev"
-        elif env in ('s', 'stage', 'staging'):
+            env = Config.ENV_D
+        elif env.lower() in ('s', 'stage', 'staging'):
             pasta = Config.PASTA_S
             cache = Config.CACHE_S
-            doi_env = "stage"
-        else:
+            env = Config.ENV_S
+        elif env.lower() in ('p', 'prod', 'production'):
             pasta = Config.PASTA_P
             cache = Config.CACHE_P
-            doi_env = "prod"
+            env = Config.ENV_P
+        else:
+            msg = f"Requested PASTA environment not supported: {env}"
+            raise PastaEnvironmentError(msg)
 
         file_path = f'{cache}{pid}.json'
 
@@ -57,10 +64,18 @@ class Citation(object):
             eml_url = f"{pasta}/metadata/eml/{scope}/{identifier}/{revision}"
             rmd_url = f"{pasta}/rmd/eml/{scope}/{identifier}/{revision}"
 
-            eml = Eml(requests_wrapper(eml_url))
-            pubdate, doi = resource_metadata(requests_wrapper(rmd_url))
+            try:
+                eml = Eml(requests_wrapper(eml_url))
+                pubdate, doi = resource_metadata(requests_wrapper(rmd_url))
+            except Exception as e:
+                logger.error(e)
+                msg = f"Error accessing data package \"{pid}\" in the \"" \
+                      f"{env}\" environment"
+                raise DataPackageError(msg)
 
-            if doi_env in ("dev", "stage"):
+
+            # Obsfucate test DOIs
+            if env in (Config.ENV_S, Config.ENV_D):
                 doi = "doi:DOI_PLACE_HOLDER"
 
             self._citation = _make_base_citation(eml.title, pubdate, revision,
@@ -68,8 +83,8 @@ class Citation(object):
             with open(file_path, "w") as fp:
                 json.dump(self._citation, fp)
 
-        self._stylizer = Stylizer(pid, self._citation)
-        self._stylized = self._stylizer.stylize(style)
+        self._stylizer = Stylizer(self._citation)
+        self._stylized = self._stylizer.stylize(style, pid)
         self._formatter = Formatter(self._stylized)
         self._media_type, self._formatted = self._formatter.format(accept)
 
