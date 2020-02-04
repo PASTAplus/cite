@@ -4,6 +4,8 @@
 """:Mod: eml
 
 :Synopsis:
+    Parses and returns Ecological Metdata Language artifacts as lists to
+    support a PASTA data pakcage citation.
 
 :Author:
     servilla
