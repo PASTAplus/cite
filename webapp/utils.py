@@ -30,6 +30,7 @@ def initials(names: list, dot: bool = True) -> str:
     else:
         return "".join(map(lambda s: f"{s[0]}", names))
 
+
 def pub_year(pubdate: str) -> str:
     year = pubdate.split("-")[0]
     return year
