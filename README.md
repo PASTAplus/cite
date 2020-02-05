@@ -152,7 +152,7 @@ to generate the *author list*. Specifically, Cite uses the [*creator*](https://e
 
     Cite uses indviduals, followed by organizations, as the authors. If neither individuals or organizations are present, it will use a position. Cite also assumes that a creator element contains information pertaining to only a single "creator", although EML allows for multiple identities in a single creator element. This means that if an individual name is present within a *creator* element, Cite will ignore the organization or position names within the same element when creating the author list. Cite also respects the order of *creator* elements as presented in the EML. As such, Cite will order the author list beginning with individuals, and followed by organizations, according to the order in the EML. To remphasize, Cite will only display a position name if there are no individuals or organizations defined in the *creator* section of the EML.
 
-<p align="center"><img src="https://raw.githubusercontent.com/PASTAplus/cite/master/eml-resource_xsd_Element_creator.png"/></p>
+<p align="center"><img src="https://raw.githubusercontent.com/PASTAplus/cite/master/images/eml-resource_xsd_Element_creator.png"/></p>
 
 - **Publication Year** - The *publication year* is defined by the calendar year when the data package was archived into the EDI data repository. The publication year may differ from the year of the publication date entered into the EML, which is often set to the date when the data package became publicly available, although not yet archived into the EDI data repository.
 
