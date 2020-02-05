@@ -84,7 +84,7 @@ def _positions(authors: list) -> list:
 def bibtex(pid: str, citation: dict) -> dict:
 
     now = (pendulum.now("UTC")).format("YYYY-MM-DD", formatter="alternative")
-    stylized = dict()
+    bibtext = dict()
 
     individuals = _individuals(citation["authors"])
     organizations = _organization(citation["authors"])
@@ -118,26 +118,25 @@ def bibtex(pid: str, citation: dict) -> dict:
     version = citation['version']
     year = pub_year(citation['pubdate'])
 
-    stylized["author"] = f"    author={{{stylized_authors}}}"
-    stylized["title"] = f"    title={{{{{title}. ver {version}}}}}"
-    stylized["year"] = f"    year={{{year}}}"
-    stylized["howpublished"] = f"    howpublished={{{{{publisher}}}}}"
-    stylized["note"] = f"    note={{Online: {doi} ({now})}}"
-    stylized["accessed"] = f"    timestamp={{{now}}}"
+    bibtext["author"] = f"    author={{{stylized_authors}}}"
+    bibtext["title"] = f"    title={{{{{title}. ver {version}}}}}"
+    bibtext["year"] = f"    year={{{year}}}"
+    bibtext["howpublished"] = f"    howpublished={{{{{publisher}}}}}"
+    bibtext["note"] = f"    note={{Online: {doi} ({now})}}"
 
-    items = list()
-    for item in stylized:
-        items.append(stylized[item])
+    fields = list()
+    for field in bibtext:
+        fields.append(bibtext[field])
 
-    s = ",\n".join(items)
-    item = {"item": f"@misc{{{pid},\n{s}\n}}\n"}
-    return item
+    s = ",\n".join(fields)
+    stylized = {"citation": f"@misc{{{pid},\n{s}\n}}"}
+    return stylized
 
 
 def bibtex_online(pid: str, citation: dict) -> dict:
 
     now = (pendulum.now("UTC")).format("YYYY-MM-DD", formatter="alternative")
-    stylized = dict()
+    bibtext = dict()
 
     individuals = _individuals(citation["authors"])
     organizations = _organization(citation["authors"])
@@ -171,21 +170,21 @@ def bibtex_online(pid: str, citation: dict) -> dict:
     version = citation['version']
     year = pub_year(citation['pubdate'])
 
-    stylized["author"] = f"    author={{{stylized_authors}}}"
-    stylized["title"] = f"    title={{{{{title}. ver {version}}}}}"
-    stylized["year"] = f"    year={{{year}}}"
-    stylized["version"] = f"    version={{{version}}}"
-    stylized["organization"] = f"    organization={{{{{publisher}}}}}"
-    stylized["url"] = f"    url={{{doi} ({now})}}"
-    stylized["timestamp"] = f"    timestamp={{{now}}}"
+    bibtext["author"] = f"    author={{{stylized_authors}}}"
+    bibtext["title"] = f"    title={{{{{title}. ver {version}}}}}"
+    bibtext["year"] = f"    year={{{year}}}"
+    bibtext["version"] = f"    version={{{version}}}"
+    bibtext["organization"] = f"    organization={{{{{publisher}}}}}"
+    bibtext["url"] = f"    url={{{doi} ({now})}}"
+    bibtext["timestamp"] = f"    timestamp={{{now}}}"
 
-    items = list()
-    for item in stylized:
-        items.append(stylized[item])
+    fields = list()
+    for field in bibtext:
+        fields.append(bibtext[field])
 
-    s = ",\n".join(items)
-    item = {"item": f"@online{{{pid},\n{s}\n}}\n"}
-    return item
+    s = ",\n".join(fields)
+    stylized = {"citation": f"@online{{{pid},\n{s}\n}}"}
+    return stylized
 
 
 def dryad(citation: dict) -> dict:
