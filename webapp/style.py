@@ -297,7 +297,7 @@ def esip(citation: dict) -> dict:
 
 def raw(citation: dict) -> dict:
     stylized = dict()
-    stylized["raw"] = citation
+    stylized["citation"] = citation
     return stylized
 
 
