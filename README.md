@@ -57,78 +57,74 @@ curl -H "Accept: text/plain" -s -X GET "https://cite.edirepository.org/cite/edi.
 curl -s -H "Accept: application/json" -X GET https://cite.edirepository.org/cite/edi.460.1?style=RAW
 
 {
-  "citation": {
-    "title": "Hurricane Harvey: Coastal wetland plant responses and recovery in Texas: 2014-2019",
-    "pubdate": "2020-01-21",
-    "version": "1",
-    "doi": "doi:10.6073/pasta/e288ccaf55afceecc29bdf0a341248d6",
-    "authors": [
-      {
-        "individual_names": [
-          {
-            "sur_name": "Armitage",
-            "given_names": [
-              "Anna",
-              "R"
-            ]
-          }
-        ],
-        "organization_names": [
-          "Texas A&M University at Galveston"
-        ],
-        "position_names": []
-      },
-      {
-        "individual_names": [
-          {
-            "sur_name": "Weaver",
-            "given_names": [
-              "Carolyn",
-              "A"
-            ]
-          }
-        ],
-        "organization_names": [
-          "Texas A&M University - Corpus Christi"
-        ],
-        "position_names": []
-      },
-      {
-        "individual_names": [
-          {
-            "sur_name": "Kominoski",
-            "given_names": [
-              "John",
-              "S"
-            ]
-          }
-        ],
-        "organization_names": [
-          "Florida International University"
-        ],
-        "position_names": []
-      },
-      {
-        "individual_names": [
-          {
-            "sur_name": "Pennings",
-            "given_names": [
-              "Steven",
-              "C"
-            ]
-          }
-        ],
-        "organization_names": [
-          "University of Houston"
-        ],
-        "position_names": []
-      }
-    ],
-    "publisher": "Environmental Data Initiative"
-  }
+  "title": "Hurricane Harvey: Coastal wetland plant responses and recovery in Texas: 2014-2019",
+  "pubdate": "2020-01-21",
+  "version": "1",
+  "doi": "doi:10.6073/pasta/e288ccaf55afceecc29bdf0a341248d6",
+  "authors": [
+    {
+      "individual_names": [
+        {
+          "sur_name": "Armitage",
+          "given_names": [
+            "Anna",
+            "R"
+          ]
+        }
+      ],
+      "organization_names": [
+        "Texas A&M University at Galveston"
+      ],
+      "position_names": []
+    },
+    {
+      "individual_names": [
+        {
+          "sur_name": "Weaver",
+          "given_names": [
+            "Carolyn",
+            "A"
+          ]
+        }
+      ],
+      "organization_names": [
+        "Texas A&M University - Corpus Christi"
+      ],
+      "position_names": []
+    },
+    {
+      "individual_names": [
+        {
+          "sur_name": "Kominoski",
+          "given_names": [
+            "John",
+            "S"
+          ]
+        }
+      ],
+      "organization_names": [
+        "Florida International University"
+      ],
+      "position_names": []
+    },
+    {
+      "individual_names": [
+        {
+          "sur_name": "Pennings",
+          "given_names": [
+            "Steven",
+            "C"
+          ]
+        }
+      ],
+      "organization_names": [
+        "University of Houston"
+      ],
+      "position_names": []
+    }
+  ],
+  "publisher": "Environmental Data Initiative"
 }
-
-
 ```
 
 
