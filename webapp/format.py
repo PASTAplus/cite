@@ -41,6 +41,8 @@ class Formatter(object):
 
 
 def application_json(stylized: dict):
+    if "citation" in stylized:
+        stylized = stylized["citation"]
     return json.dumps(stylized, indent=2)
 
 
