@@ -163,7 +163,7 @@ to generate the *author list*. Specifically, Cite uses the [*creator*](https://e
 
 - **Publisher** - By default, the *publisher* field of the citation is always to the Environmental Data Initiative. This value will not change during the tenure of the EDI data repository.
 
-- **DOI** -The *Digital Object Identifier* (DOI) will consist of the EDI DOI value that is registered with DataCite, and is displayed using the fully qualified "doi.org" URL. This DOI URL will resolve to the corresponding "landing page" of the data package as displayed on the EDI Data Portal.
-
+- **DOI** -The *Digital Object Identifier* (DOI) is the EDI generated DOI value that is registered with DataCite, and is displayed using the fully qualified "doi.org" URL. This DOI URL will resolve to the corresponding "landing page" of the data package as displayed on the EDI Data Portal.
+ 
 - **Access Date** - Finally, the *access date* displays the date in which the citation was generated, assuming that it serves as a proxy for the date in which the data package was viewed.
 
