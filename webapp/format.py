@@ -41,7 +41,7 @@ class Formatter(object):
 
 
 def application_json(stylized: dict):
-    return json.dumps(stylized)
+    return json.dumps(stylized, indent=2)
 
 
 def text_html(stylized: dict):
@@ -55,14 +55,14 @@ def text_html(stylized: dict):
 
     items = list()
     for item in stylized:
-        items.append(stylized[item])
+        items.append(str(stylized[item]))
     return " ".join(items)
 
 
 def text_plain(stylized: dict):
     items = list()
     for item in stylized:
-        items.append(stylized[item])
+        items.append(str(stylized[item]))
     return " ".join(items)
 
 
