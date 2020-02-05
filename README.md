@@ -154,16 +154,15 @@ to generate the *author list*. Specifically, Cite uses the [*creator*](https://e
 
 <p align="center"><img src="https://raw.githubusercontent.com/PASTAplus/cite/master/eml-resource_xsd_Element_creator.png"/></p>
 
-- **Publication Year** - The *publication year* is defined by the date when
- the data package was archived into the EDI data repository and only displays the year of publication. This publication date may differ from the publication date entered into the EML, which often marks when it became a public data package, although yet archived into a public repository.
+- **Publication Year** - The *publication year* is defined by the calendar year when the data package was archived into the EDI data repository. The publication year may differ from the year of the publication date entered into the EML, which is often set to the date when the data package became publicly available, although not yet archived into the EDI data repository.
 
 - **Title** - Cite uses the *title* section of EML as the citation title. EML *title* elements are copied verbatim into the citation.
 
 - **Version Number** -The citation *version number* represents the revision step (or increment) of the data package as archived in the EDI data repository. Revision values are whole numbers and have a one-to-one correspondence to the revision of the data package in the repository.
 
-- **Publisher** - By default, the *publisher* field of the citation is always to the Environmental Data Initiative. This value will not change during the tenure of the EDI data repository.
+- **Publisher** - By default, the *publisher* field of the citation is permanently set to "Environmental Data Initiative". This value will not change during the tenure of the EDI data repository.
 
 - **DOI** -The *Digital Object Identifier* (DOI) is the EDI generated DOI value that is registered with DataCite, and is displayed using the fully qualified "doi.org" URL. This DOI URL will resolve to the corresponding "landing page" of the data package as displayed on the EDI Data Portal.
  
-- **Access Date** - Finally, the *access date* displays the date in which the citation was generated, assuming that it serves as a proxy for the date in which the data package was viewed.
+- **Access Date** - The *access date* is the UTC date in which the citation was requested.
 
