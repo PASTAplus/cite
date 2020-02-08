@@ -14,7 +14,6 @@
 :Created:
     1/21/20
 """
-import copy
 import json
 import os
 
@@ -34,7 +33,8 @@ logger = daiquiri.getLogger(__name__)
 
 class Citation(object):
 
-    def __init__(self, pid: str, env: str, style: str, accept: str):
+    def __init__(self, pid: str, env: str, style: str, accept: str,
+                 access: str):
 
         if env.lower() in ('d', 'dev', 'development'):
             pasta = Config.PASTA_D
@@ -73,7 +73,6 @@ class Citation(object):
                       f"{env}\" environment"
                 raise DataPackageError(msg)
 
-
             # Obsfucate test DOIs
             if env in (Config.ENV_S, Config.ENV_D):
                 doi = "doi:DOI_PLACE_HOLDER"
@@ -84,7 +83,7 @@ class Citation(object):
                 json.dump(self._citation, fp)
 
         self._stylizer = Stylizer(self._citation)
-        self._stylized = self._stylizer.stylize(style, pid)
+        self._stylized = self._stylizer.stylize(style, pid, access)
         self._formatter = Formatter(self._stylized)
         self._media_type, self._formatted = self._formatter.format(accept)
 

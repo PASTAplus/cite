@@ -46,13 +46,14 @@ def cite(pid=None):
     style = request.args.get("style")
     if style is None:
         style = Config.DEFAULT_STYLE
+    access = request.args.get("access")
     accept = request.headers.get("Accept")
     if accept is None:
         accept = Config.DEFAULT_ACCEPT
     # TODO token = request.args.get("token")
 
     try:
-        citation = Citation(pid, env, style, accept)
+        citation = Citation(pid, env, style, accept, access)
         response = make_response(citation.formatted)
         response.headers['Content-Type'] = citation.media
         return response
