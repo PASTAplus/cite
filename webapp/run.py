@@ -55,7 +55,7 @@ def cite(pid=None):
     try:
         citation = Citation(pid, env, style, accept, access)
         response = make_response(citation.formatted)
-        response.headers['Content-Type'] = citation.media
+        response.headers["Content-Type"] = f"{citation.media}; charset=utf-8"
         return response
     except Exception as e:
         logger.error(e)
