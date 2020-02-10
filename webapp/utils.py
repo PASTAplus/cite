@@ -24,7 +24,7 @@ def doi_url(doi: str) -> str:
     return doi.replace("doi:", url)
 
 
-def initials(names: list, dot: bool = True) -> str:
+def initials(names: list, dot: bool) -> str:
     if dot:
         return "".join(map(lambda s: f"{s[0]}.", names))
     else:
