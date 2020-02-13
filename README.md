@@ -142,6 +142,22 @@ curl -s -H "Accept: application/json" -X GET https://cite.edirepository.org/cite
 }
 ```
 
+6 - Using PHP to retrieve the default ESIP style with the access date (sans the response):
+
+```
+$url_get_citation = "https://cite.edirepository.org/cite/knb-lter-ntl.".$datasetID.".".$revision."?access";
+$headers = array(
+               'Accept: text/html'
+               );
+$curl_cit = curl_init();
+curl_setopt_array($curl_cit, [
+               CURLOPT_RETURNTRANSFER => 1,
+               CURLOPT_URL => $url_get_citation,
+               CURLOPT_HTTPHEADER => $headers
+               ]);
+$result = curl_exec($curl_cit);
+curl_close($curl_cit);
+```
 
 ## A note about how Cite generates a citation
 
