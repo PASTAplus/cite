@@ -197,7 +197,8 @@ def esip(access: str, citation: dict) -> dict:
     authors = list()
     names = _names(citation["authors"])
     for name in names:
-        # Make initials if given names present
+        # Make initials if valid given names present
+        name[0] = [_.strip() for _ in name[0] if _ != ""]
         _initials = initials(name[0], dot=True)
         _ = f"{_initials} {name[1]}"
         authors.append(_.strip())
