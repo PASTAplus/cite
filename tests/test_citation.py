@@ -23,8 +23,10 @@ def test_citation():
     pid = "knb-lter-nin.1.1"
     env = "production"
     style = "ESIP"
-    accept = "text/html"
-    citation = Citation(pid, env, style, accept)
+    accept = "text/plain"
+    access = True
+    no_dot = True
+    citation = Citation(pid, env, style, accept, access, no_dot)
     assert isinstance(citation, Citation)
     assert citation.base is not None
     print(json.dumps(citation.base, indent=2))

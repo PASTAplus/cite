@@ -31,14 +31,14 @@ class Stylizer(object):
     def __init__(self, citation: dict):
         self._citation = citation
 
-    def stylize(self, style: str, pid: str, access: str) -> dict:
+    def stylize(self, style: str, pid: str, access: bool, no_dot: bool) -> dict:
         style = style.upper()
         if style in styles:
             stylizer = styles[style]
             if style in ('BIBTEX', "BIBTEX-ONLINE"):
-                stylized = stylizer(pid, access, self._citation)
-            elif style in ('ESIP'):
-                stylized = stylizer(access, self._citation)
+                stylized = stylizer(self._citation, pid, access)
+            elif style in 'ESIP':
+                stylized = stylizer(self._citation, access, no_dot)
             else:
                 stylized = stylizer(self._citation)
             return stylized
@@ -82,7 +82,7 @@ def _names(authors: list) -> list:
     return names
 
 
-def bibtex(pid: str, access: str, citation: dict) -> dict:
+def bibtex(citation: dict, pid: str, access: bool) -> dict:
 
     bibtext = dict()
 
@@ -105,7 +105,7 @@ def bibtex(pid: str, access: str, citation: dict) -> dict:
     bibtext["year"] = f"    year={{{year}}}"
     bibtext["howpublished"] = f"    howpublished={{{{{publisher}}}}}"
 
-    if access is None:
+    if access:
         bibtext["note"] = f"    note={{Online: {doi}}}"
     else:
         now = (pendulum.now("UTC")).format("YYYY-MM-DD", formatter="alternative")
@@ -120,7 +120,7 @@ def bibtex(pid: str, access: str, citation: dict) -> dict:
     return stylized
 
 
-def bibtex_online(pid: str, access: str, citation: dict) -> dict:
+def bibtex_online(citation: dict, pid: str, access: bool) -> dict:
 
     bibtext = dict()
 
@@ -144,7 +144,7 @@ def bibtex_online(pid: str, access: str, citation: dict) -> dict:
     bibtext["version"] = f"    version={{{version}}}"
     bibtext["organization"] = f"    organization={{{{{publisher}}}}}"
 
-    if access is None:
+    if access:
         bibtext["url"] = f"    url={{{doi}}}"
     else:
         now = (pendulum.now("UTC")).format("YYYY-MM-DD",
@@ -180,6 +180,8 @@ def dryad(citation: dict) -> dict:
         stylized_authors = " ".join(authors)
     elif len(authors) > 2:
         stylized_authors = ", ".join(authors)
+    else:
+        stylized_authors = authors[0]
 
     stylized["authors"] = stylized_authors
     stylized["pub_year"] = f"({pub_year(citation['pubdate'])})"
@@ -190,7 +192,7 @@ def dryad(citation: dict) -> dict:
     return stylized
 
 
-def esip(access: str, citation: dict) -> dict:
+def esip(citation: dict, access: bool, no_dot: bool) -> dict:
 
     stylized = dict()
 
@@ -225,12 +227,18 @@ def esip(access: str, citation: dict) -> dict:
     stylized["title"] = f"{citation['title']}"
     stylized["version"] = f"ver {citation['version']}."
     stylized["publisher"] = f"{citation['publisher']}."
-    stylized["doi"] = f"{doi_url(citation['doi'])}."
+    if no_dot:
+        stylized["doi"] = f"{doi_url(citation['doi'])}"
+    else:
+        stylized["doi"] = f"{doi_url(citation['doi'])}."
 
-    if access is not None:
+    if access:
         now = (pendulum.now("UTC")).format("YYYY-MM-DD",
                                            formatter="alternative")
-        stylized["accessed"] = f"Accessed {now}."
+        if no_dot:
+            stylized["accessed"] = f"(Accessed {now})."
+        else:
+            stylized["accessed"] = f"Accessed {now}."
 
     return stylized
 
