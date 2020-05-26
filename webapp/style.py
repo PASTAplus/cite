@@ -181,7 +181,7 @@ def dryad(citation: dict) -> dict:
     elif len(authors) > 2:
         stylized_authors = ", ".join(authors)
     else:
-        stylized_authors = authors
+        stylized_authors = authors[0]
 
     stylized["authors"] = stylized_authors
     stylized["pub_year"] = f"({pub_year(citation['pubdate'])})"
