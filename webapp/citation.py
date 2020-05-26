@@ -34,7 +34,7 @@ logger = daiquiri.getLogger(__name__)
 class Citation(object):
 
     def __init__(self, pid: str, env: str, style: str, accept: str,
-                 access: str):
+                 access: bool, no_dot: bool):
 
         if env.lower() in ('d', 'dev', 'development'):
             pasta = Config.PASTA_D
@@ -83,7 +83,7 @@ class Citation(object):
                 json.dump(self._citation, fp)
 
         self._stylizer = Stylizer(self._citation)
-        self._stylized = self._stylizer.stylize(style, pid, access)
+        self._stylized = self._stylizer.stylize(style, pid, access, no_dot)
         self._formatter = Formatter(self._stylized)
         self._media_type, self._formatted = self._formatter.format(accept)
 
