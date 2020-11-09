@@ -5,6 +5,7 @@ channels:
 dependencies:
   - _libgcc_mutex=0.1
   - _openmp_mutex=4.5
+  - attrs=20.2.0
   - brotlipy=0.7.0
   - ca-certificates=2020.6.20
   - certifi=2020.6.20
@@ -16,7 +17,9 @@ dependencies:
   - flask=1.1.2
   - icu=67.1
   - idna=2.10
+  - iniconfig=1.1.1
   - itsdangerous=1.1.0
+  - jansson=2.11
   - jinja2=2.11.2
   - ld_impl_linux-64=2.35
   - libffi=3.2.1
@@ -28,13 +31,20 @@ dependencies:
   - libxslt=1.1.33
   - lxml=4.6.1
   - markupsafe=1.1.1
+  - more-itertools=8.6.0
   - ncurses=6.2
   - openssl=1.1.1h
+  - packaging=20.4
+  - pcre=8.44
   - pendulum=2.1.2
   - pip=20.2.4
+  - pluggy=0.13.1
+  - py=1.9.0
   - pycparser=2.20
   - pyopenssl=19.1.0
+  - pyparsing=2.4.7
   - pysocks=1.7.1
+  - pytest=6.1.2
   - python=3.8.6
   - python-dateutil=2.8.1
   - python-json-logger=2.0.1
@@ -46,9 +56,12 @@ dependencies:
   - six=1.15.0
   - sqlite=3.33.0
   - tk=8.6.10
+  - toml=0.10.2
   - urllib3=1.25.11
+  - uwsgi=2.0.19.1
   - werkzeug=1.0.1
   - wheel=0.35.1
   - xz=5.2.5
+  - yaml=0.2.5
   - zlib=1.2.11
 prefix: /home/servilla/anaconda3/envs/cite
