@@ -233,8 +233,7 @@ def esip(citation: dict, access: bool, no_dot: bool) -> dict:
         stylized["doi"] = f"{doi_url(citation['doi'])}."
 
     if access:
-        now = (pendulum.now("UTC")).format("YYYY-MM-DD",
-                                           formatter="alternative")
+        now = (pendulum.now("UTC")).format("YYYY-MM-DD")
         if no_dot:
             stylized["accessed"] = f"(Accessed {now})."
         else:
