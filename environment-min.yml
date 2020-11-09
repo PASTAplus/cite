@@ -1,0 +1,12 @@
+name: cite
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - requests
+  - flask
+  - lxml
+  - pendulum
+  - daiquiri
+prefix: /home/servilla/anaconda3/envs/cite
