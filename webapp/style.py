@@ -106,10 +106,10 @@ def bibtex(citation: dict, pid: str, access: bool) -> dict:
     bibtext["howpublished"] = f"    howpublished={{{{{publisher}}}}}"
 
     if access:
-        bibtext["note"] = f"    note={{Online: {doi}}}"
-    else:
-        now = (pendulum.now("UTC")).format("YYYY-MM-DD", formatter="alternative")
+        now = (pendulum.now("UTC")).format("YYYY-MM-DD")
         bibtext["note"] = f"    note={{Online: {doi} ({now})}}"
+    else:
+        bibtext["note"] = f"    note={{Online: {doi}}}"
 
     fields = list()
     for field in bibtext:
@@ -145,12 +145,11 @@ def bibtex_online(citation: dict, pid: str, access: bool) -> dict:
     bibtext["organization"] = f"    organization={{{{{publisher}}}}}"
 
     if access:
-        bibtext["url"] = f"    url={{{doi}}}"
-    else:
-        now = (pendulum.now("UTC")).format("YYYY-MM-DD",
-                                           formatter="alternative")
+        now = (pendulum.now("UTC")).format("YYYY-MM-DD")
         bibtext["url"] = f"    url={{{doi} ({now})}}"
         bibtext["timestamp"] = f"    timestamp={{{now}}}"
+    else:
+        bibtext["url"] = f"    url={{{doi}}}"
 
     fields = list()
     for field in bibtext:
