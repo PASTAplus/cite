@@ -44,14 +44,14 @@ IndividualName.__new__.__defaults__ = (None, None)
 
 
 class Eml(object):
-    def __init__(self, eml: str):
+    def __init__(self, eml: str, ignore: list):
         self._eml = eml.encode("utf-8")
         self._root = etree.fromstring(self._eml)
         self._title = self._get_title()
         self._pubdate = self._get_pubdate()
-        self._creators = self._get_creators()
+        self._creators = self._get_creators(ignore)
 
-    def _get_creators(self):
+    def _get_creators(self, ignore):
         creators = list()
         _creators = self._root.findall(".//dataset/creator")
         for _creator in _creators:
@@ -80,6 +80,21 @@ class Eml(object):
                 position_name = (
                     clean(_position_name.xpath("string()")))
                 position_names.append(position_name)
+
+            ignored = 0
+            if "INDIVIDUAL" in ignore:
+                individual_names = []
+                ignored += 1
+            if "ORGANIZATION" in ignore:
+                organization_names = []
+                ignored += 1
+            if "POSITION" in ignore:
+                position_names = []
+                ignored += 1
+            if ignored == 3:
+                msg = "ignore list cannot include all of INDIVIDUAL, ORGANIZATION, and POSITION"
+                raise ValueError(msg)
+
             creator = {"individual_names": individual_names,
                        "organization_names": organization_names,
                        "position_names": position_names}

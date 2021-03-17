@@ -30,6 +30,12 @@ Cite accepts the following options as query parameters with the request URL:
     ```text
     ?<style>=[ESIP(default), DRYAD, BIBTEX, RAW]
     ```
+  
+- __*ignore*__ - Ignore up to 2 of INDIVIDUAL, ORGANIZATION, or POSITION as a comma delimited list.
+
+    ```text
+    ?<ignore>=[INDIVIDUAL, ORGANIZATION, POSITION]
+    ```
 
 ## Response body formatting
 

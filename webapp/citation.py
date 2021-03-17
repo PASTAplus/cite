@@ -32,19 +32,26 @@ logger = daiquiri.getLogger(__name__)
 
 
 class Citation(object):
+    def __init__(
+        self,
+        pid: str,
+        env: str,
+        style: str,
+        accept: str,
+        access: bool,
+        ignore: list,
+        no_dot: bool,
+    ):
 
-    def __init__(self, pid: str, env: str, style: str, accept: str,
-                 access: bool, no_dot: bool):
-
-        if env.lower() in ('d', 'dev', 'development'):
+        if env.lower() in ("d", "dev", "development"):
             pasta = Config.PASTA_D
             cache = Config.CACHE_D
             env = Config.ENV_D
-        elif env.lower() in ('s', 'stage', 'staging'):
+        elif env.lower() in ("s", "stage", "staging"):
             pasta = Config.PASTA_S
             cache = Config.CACHE_S
             env = Config.ENV_S
-        elif env.lower() in ('p', 'prod', 'production'):
+        elif env.lower() in ("p", "prod", "production"):
             pasta = Config.PASTA_P
             cache = Config.CACHE_P
             env = Config.ENV_P
@@ -52,7 +59,7 @@ class Citation(object):
             msg = f"Requested PASTA environment not supported: {env}"
             raise PastaEnvironmentError(msg)
 
-        file_path = f'{cache}{pid}.json'
+        file_path = f"{cache}{pid}.json"
 
         if os.path.isfile(file_path):
             # Read from cached location
@@ -65,20 +72,26 @@ class Citation(object):
             rmd_url = f"{pasta}/rmd/eml/{scope}/{identifier}/{revision}"
 
             try:
-                eml = Eml(requests_wrapper(eml_url))
+                eml = Eml(requests_wrapper(eml_url), ignore)
                 pubdate, doi = resource_metadata(requests_wrapper(rmd_url))
+            except ValueError as e:
+                logger.error(e)
+                raise
             except Exception as e:
                 logger.error(e)
-                msg = f"Error accessing data package \"{pid}\" in the \"" \
-                      f"{env}\" environment"
+                msg = (
+                    f'Error accessing data package "{pid}" in the "'
+                    f'{env}" environment'
+                )
                 raise DataPackageError(msg)
 
             # Obsfucate test DOIs
             if env in (Config.ENV_S, Config.ENV_D):
                 doi = "doi:DOI_PLACE_HOLDER"
 
-            self._citation = _make_base_citation(eml.title, pubdate, revision,
-                                                 doi, eml.creators)
+            self._citation = _make_base_citation(
+                eml.title, pubdate, revision, doi, eml.creators
+            )
             with open(file_path, "w") as fp:
                 json.dump(self._citation, fp)
 
@@ -104,8 +117,9 @@ class Citation(object):
         return self._stylized
 
 
-def _make_base_citation(title: str, pubdate: str, version: str,
-                        doi: str, authors: list) -> dict:
+def _make_base_citation(
+    title: str, pubdate: str, version: str, doi: str, authors: list
+) -> dict:
     citation = dict()
     citation["title"] = title
     citation["pubdate"] = pubdate
