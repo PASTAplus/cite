@@ -25,8 +25,9 @@ def test_citation():
     style = "ESIP"
     accept = "text/plain"
     access = True
+    ignores = list()
     no_dot = True
-    citation = Citation(pid, env, style, accept, access, no_dot)
+    citation = Citation(pid, env, style, accept, access, ignores, no_dot)
     assert isinstance(citation, Citation)
     assert citation.base is not None
     print(json.dumps(citation.base, indent=2))

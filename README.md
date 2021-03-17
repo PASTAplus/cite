@@ -31,10 +31,10 @@ Cite accepts the following options as query parameters with the request URL:
     ?<style>=[ESIP(default), DRYAD, BIBTEX, RAW]
     ```
   
-- __*ignore*__ - Ignore up to 2 of INDIVIDUAL, ORGANIZATION, or POSITION as a comma delimited list.
+- __*ignore*__ - Ignore INDIVIDUALS, ORGANIZATIONS, or POSITIONS in author list.
 
     ```text
-    ?<ignore>=[INDIVIDUAL, ORGANIZATION, POSITION]
+    ?<ignore>=[INDIVIDUALS, ORGANIZATIONS, POSITIONS]
     ```
 
 ## Response body formatting

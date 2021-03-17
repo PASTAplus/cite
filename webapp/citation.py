@@ -39,7 +39,7 @@ class Citation(object):
         style: str,
         accept: str,
         access: bool,
-        ignore: list,
+        ignores: list,
         no_dot: bool,
     ):
 
@@ -72,7 +72,7 @@ class Citation(object):
             rmd_url = f"{pasta}/rmd/eml/{scope}/{identifier}/{revision}"
 
             try:
-                eml = Eml(requests_wrapper(eml_url), ignore)
+                eml = Eml(requests_wrapper(eml_url))
                 pubdate, doi = resource_metadata(requests_wrapper(rmd_url))
             except ValueError as e:
                 logger.error(e)
@@ -94,6 +94,14 @@ class Citation(object):
             )
             with open(file_path, "w") as fp:
                 json.dump(self._citation, fp)
+
+        if len(ignores) > 0:
+            authors = _ignore(ignores, self._citation["authors"])
+            if len(authors) == 0:
+                msg = "Author list is empty"
+                raise ValueError(msg)
+            else:
+                self._citation["authors"] = authors
 
         self._stylizer = Stylizer(self._citation)
         self._stylized = self._stylizer.stylize(style, pid, access, no_dot)
@@ -128,3 +136,28 @@ def _make_base_citation(
     citation["authors"] = authors
     citation["publisher"] = Config.PUBLISHER
     return citation
+
+
+def _ignore(ignores: list, authors: list) -> list:
+    _authors = list()
+    for author in authors:
+        if "INDIVIDUALS" in ignores:
+            author["individual_names"] = []
+        if "ORGANIZATIONS" in ignores:
+            author["organization_names"] = []
+        if "POSITIONS" in ignores:
+            author["position_names"] = []
+        if not _is_empty_author(author):
+            _authors.append(author)
+    return _authors
+
+
+def _is_empty_author(author: dict) -> bool:
+    if (
+        len(author["individual_names"]) == 0
+        and len(author["organization_names"]) == 0
+        and len(author["position_names"]) == 0
+    ):
+        return True
+    else:
+        return False

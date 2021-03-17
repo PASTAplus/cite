@@ -54,10 +54,9 @@ def cite(pid=None):
         access = True
 
     ignore = request.args.get("ignore")
+    ignores = list()
     if ignore is not None:
-        ignore = ignore.upper().split(",")
-    else:
-        ignore = []
+        ignores = ignore.upper().split(",")
 
     if request.args.get("no_dot") is None:
         no_dot = False
@@ -70,7 +69,7 @@ def cite(pid=None):
     # TODO token = request.args.get("token")
 
     try:
-        citation = Citation(pid, env, style, accept, access, ignore, no_dot)
+        citation = Citation(pid, env, style, accept, access, ignores, no_dot)
         response = make_response(citation.formatted)
         response.headers["Content-Type"] = f"{citation.media}; charset=utf-8"
         return response
