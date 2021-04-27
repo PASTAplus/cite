@@ -197,15 +197,17 @@ def esip(citation: dict, access: bool, no_dot: bool) -> dict:
 
     authors = list()
     names = _names(citation["authors"])
+
+    # Make initials if valid given names present
     for name in names:
-        # Make initials if valid given names present
+        # Clean empty given names from list
         name[0] = [_.strip() for _ in name[0] if _ != ""]
         _initials = initials(name[0], dot=True)
         _ = f"{_initials} {name[1]}"
         authors.append(_.strip())
 
     # Reverse lead author name if given name present
-    if len(authors) > 0:
+    if len(authors) > 0 and len(names[0][0]) != 0:
         name = authors[0].split(" ")
         if len(name) == 2:
             authors[0] = f"{name[1]}, {name[0]}"
