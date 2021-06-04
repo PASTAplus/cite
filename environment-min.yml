@@ -12,4 +12,5 @@ dependencies:
   - pytest
   - uwsgi
   - libiconv
+  - urllib3=1.26.5
 prefix: /home/servilla/anaconda3/envs/cite
