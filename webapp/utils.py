@@ -39,6 +39,7 @@ def pub_year(pubdate: str) -> str:
 def requests_wrapper(url: str) -> str:
     r = requests.get(url)
     if r.status_code == requests.codes.ok:
+        r.encoding = "UTF-8"
         return r.text
     else:
         raise requests.exceptions.ConnectionError()
