@@ -103,13 +103,15 @@ def bibtex(citation: dict, pid: str, access: bool) -> dict:
     bibtext["author"] = f"    author={{{stylized_authors}}}"
     bibtext["title"] = f"    title={{{{{title}. ver {version}}}}}"
     bibtext["year"] = f"    year={{{year}}}"
-    bibtext["howpublished"] = f"    howpublished={{{{{publisher}}}}}"
+    bibtext["publisher"] = f"    publisher={{{publisher}}}"
+    bibtext["doi"] = f"    doi={{{doi.replace('https://doi.org/', '')}}}"
+    bibtext["url"] = f"    url={{{doi}}}"
 
     if access:
         now = (pendulum.now("UTC")).format("YYYY-MM-DD")
-        bibtext["note"] = f"    note={{Online: {doi} ({now})}}"
-    else:
-        bibtext["note"] = f"    note={{Online: {doi}}}"
+        bibtext["urldate"] = f"    urldate={{{now}}}"
+
+    bibtext["note"] = f"    note = {{Type: dataset}}"
 
     fields = list()
     for field in bibtext:
