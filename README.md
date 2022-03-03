@@ -210,3 +210,6 @@ to generate the *author list*. Specifically, Cite uses the [*creator*](https://e
  
 - **Access Date** - The *access date* is the UTC date in which the citation was requested.
 
+## References
+
+ESIP Data Preservation and Stewardship Committee (2019): Data Citation Guidelines for Earth Science Data, Version 2. ESIP. Online resource. https://doi.org/10.6084/m9.figshare.8441816.v1 
