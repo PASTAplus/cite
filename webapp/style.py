@@ -211,8 +211,8 @@ def esip(citation: dict, access: bool, no_dot: bool) -> dict:
     # Reverse lead author name if given name present
     if len(authors) > 0 and len(names[0][0]) != 0:
         name = authors[0].split(" ")
-        if len(name) == 2:
-            authors[0] = f"{name[1]}, {name[0]}"
+        if len(name) >= 2:
+            authors[0] = f"{' '.join(name[1:])}, {name[0]}"
 
     if len(authors) > 1:
         authors[-1] = f"and {authors[-1]}"
