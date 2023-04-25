@@ -3,14 +3,14 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - lxml
-  - flask
-  - python=3.8
-  - pendulum
-  - requests
-  - daiquiri
   - pytest
-  - uwsgi
-  - libiconv
+  - flask
+  - requests
+  - lxml
   - urllib3
+  - libiconv
+  - pendulum
+  - python=3.11
+  - daiquiri
+  - uwsgi
 prefix: /home/servilla/anaconda3/envs/cite
