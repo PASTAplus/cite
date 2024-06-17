@@ -27,7 +27,7 @@ setuptools==69.5.1
 six==1.16.0
 time-machine==2.14.1
 tomli==2.0.1
-urllib3==2.2.1
+urllib3==2.2.2
 uWSGI==2.0.23
 Werkzeug==3.0.3
 wheel==0.43.0
