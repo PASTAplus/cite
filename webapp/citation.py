@@ -14,8 +14,10 @@
 :Created:
     1/21/20
 """
+from datetime import datetime
 import json
 import os
+from urllib.parse import urlparse
 
 import daiquiri
 
@@ -43,6 +45,9 @@ class Citation(object):
         no_dot: bool,
     ):
 
+        eml_url = None
+        rmd_url = None
+
         if env.lower() in ("d", "dev", "development"):
             pasta = Config.PASTA_D
             cache = Config.CACHE_D
@@ -55,45 +60,54 @@ class Citation(object):
             pasta = Config.PASTA_P
             cache = Config.CACHE_P
             env = Config.ENV_P
+        elif _is_valid_url(env):
+            eml_url = env
+            pasta = None
+            cache = None
         else:
             msg = f"Requested PASTA environment not supported: {env}"
             raise PastaEnvironmentError(msg)
 
-        file_path = f"{cache}{pid}.json"
+        if eml_url is None:
+            file_path = f"{cache}{pid}.json"
 
-        if os.path.isfile(file_path):
-            # Read from cached location
-            with open(file_path, "r") as fp:
-                self._citation = json.load(fp)
+            if os.path.isfile(file_path):
+                # Read from cached location
+                with open(file_path, "r") as fp:
+                    self._citation = json.load(fp)
+            else:
+                scope, identifier, revision = pid.strip().split(".")
+                eml_url = f"{pasta}/metadata/eml/{scope}/{identifier}/{revision}"
+                rmd_url = f"{pasta}/rmd/eml/{scope}/{identifier}/{revision}"
 
-        else:
-            scope, identifier, revision = pid.strip().split(".")
-            eml_url = f"{pasta}/metadata/eml/{scope}/{identifier}/{revision}"
-            rmd_url = f"{pasta}/rmd/eml/{scope}/{identifier}/{revision}"
-
-            try:
+        try:
+            if eml_url is not None:
                 eml = Eml(requests_wrapper(eml_url))
+            if rmd_url is not None:
                 pubdate, doi = resource_metadata(requests_wrapper(rmd_url))
-            except ValueError as e:
-                logger.error(e)
-                raise
-            except Exception as e:
-                logger.error(e)
-                msg = (
-                    f'Error accessing data package "{pid}" in the "'
-                    f'{env}" environment'
-                )
-                raise DataPackageError(msg)
-
-            # Obsfucate test DOIs
-            if env in (Config.ENV_S, Config.ENV_D):
+            else:
+                pubdate = datetime.now().year
                 doi = "doi:DOI_PLACE_HOLDER"
-
-            self._citation = _make_base_citation(
-                eml.title, pubdate, revision, doi, eml.creators
+        except ValueError as e:
+            logger.error(e)
+            raise
+        except Exception as e:
+            logger.error(e)
+            msg = (
+                f'Error accessing data package "{pid}" in the "'
+                f'{env}" environment'
             )
-            with open(file_path, "w") as fp:
-                json.dump(self._citation, fp)
+            raise DataPackageError(msg)
+
+        # Obsfucate test DOIs
+        if env != Config.ENV_P:
+            doi = "doi:DOI_PLACE_HOLDER"
+
+        self._citation = _make_base_citation(
+            eml.title, pubdate, revision, doi, eml.creators
+        )
+        with open(file_path, "w") as fp:
+            json.dump(self._citation, fp)
 
         if len(ignores) > 0:
             authors = _ignore(ignores, self._citation["authors"])
@@ -160,4 +174,12 @@ def _is_empty_author(author: dict) -> bool:
     ):
         return True
     else:
+        return False
+
+
+def _is_valid_url(url: str) -> bool:
+    try:
+        result = urlparse(url)
+        return all([result.scheme, result.netloc])
+    except ValueError:
         return False
