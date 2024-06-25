@@ -10,7 +10,7 @@ dependencies:
   - urllib3
   - libiconv
   - pendulum
-  - python=3.11
+  - python=3.12
   - daiquiri
   - uwsgi
 prefix: /home/servilla/anaconda3/envs/cite
