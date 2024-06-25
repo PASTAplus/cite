@@ -18,7 +18,7 @@ from collections import namedtuple
 import daiquiri
 from lxml import etree
 
-logger = daiquiri.getLogger("eml_2_1_1: " + __name__)
+logger = daiquiri.getLogger(__name__)
 
 
 def flatten(element):
