@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -64,50 +65,53 @@ class Citation(object):
             eml_url = env
             pasta = None
             cache = None
+            env = None
         else:
             msg = f"Requested PASTA environment not supported: {env}"
             raise PastaEnvironmentError(msg)
 
         if eml_url is None:
             file_path = f"{cache}{pid}.json"
+        else:
+            file_path = None
 
-            if os.path.isfile(file_path):
-                # Read from cached location
-                with open(file_path, "r") as fp:
-                    self._citation = json.load(fp)
-            else:
-                scope, identifier, revision = pid.strip().split(".")
+        if file_path is not None and os.path.isfile(file_path):
+            # Read from cached location
+            with open(file_path, "r") as fp:
+                self._citation = json.load(fp)
+        else:
+            scope, identifier, revision = pid.strip().split(".")
+            if eml_url is None:
                 eml_url = f"{pasta}/metadata/eml/{scope}/{identifier}/{revision}"
                 rmd_url = f"{pasta}/rmd/eml/{scope}/{identifier}/{revision}"
-
-        try:
-            if eml_url is not None:
+            try:
                 eml = Eml(requests_wrapper(eml_url))
-            if rmd_url is not None:
-                pubdate, doi = resource_metadata(requests_wrapper(rmd_url))
-            else:
-                pubdate = datetime.now().year
+                if rmd_url is not None:
+                    pubdate, doi = resource_metadata(requests_wrapper(rmd_url))
+                else:
+                    pubdate = str(datetime.now().year)
+            except ValueError as e:
+                logger.error(e)
+                raise
+            except Exception as e:
+                logger.error(e)
+                msg = (
+                    f'Error accessing data package "{pid}" in the "'
+                    f'{env}" environment'
+                )
+                raise DataPackageError(msg)
+
+            # Obsfucate test DOIs
+            if env != Config.ENV_P:
                 doi = "doi:DOI_PLACE_HOLDER"
-        except ValueError as e:
-            logger.error(e)
-            raise
-        except Exception as e:
-            logger.error(e)
-            msg = (
-                f'Error accessing data package "{pid}" in the "'
-                f'{env}" environment'
+
+            self._citation = _make_base_citation(
+                eml.title, pubdate, revision, doi, eml.creators
             )
-            raise DataPackageError(msg)
 
-        # Obsfucate test DOIs
-        if env != Config.ENV_P:
-            doi = "doi:DOI_PLACE_HOLDER"
-
-        self._citation = _make_base_citation(
-            eml.title, pubdate, revision, doi, eml.creators
-        )
-        with open(file_path, "w") as fp:
-            json.dump(self._citation, fp)
+            if file_path is not None:
+                with open(file_path, "w") as fp:
+                    json.dump(self._citation, fp)
 
         if len(ignores) > 0:
             authors = _ignore(ignores, self._citation["authors"])
