@@ -69,5 +69,5 @@ typer-slim==0.20.0
 typing_extensions==4.15.0
 typing-inspection==0.4.2
 urllib3==2.6.1
-wheel==0.45.1
+wheel==0.46.2
 zstandard==0.25.0
